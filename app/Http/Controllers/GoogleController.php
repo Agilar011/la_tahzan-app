@@ -1,11 +1,12 @@
 <?php
-//abcde
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class GoogleController extends Controller
@@ -18,26 +19,26 @@ class GoogleController extends Controller
     public function googlecallback()
     {
         try {
-            $user = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->user();
 
             // Cari pengguna berdasarkan email terlebih dahulu
-            $finduser = User::where('email', $user->email)->first();
+            $user = User::where('email', $googleUser->email)->first();
 
-            if ($finduser) {
+            if ($user) {
                 // Jika pengguna ditemukan tetapi tidak memiliki google_id, perbarui entri tersebut
-                if (!$finduser->google_id) {
-                    $finduser->google_id = $user->id;
-                    $finduser->save();
+                if (!$user->google_id) {
+                    $user->google_id = $googleUser->id;
+                    $user->save();
                 }
 
                 // Login pengguna yang ditemukan
-                Auth::login($finduser);
+                Auth::login($user);
             } else {
                 // Jika pengguna tidak ditemukan, buat pengguna baru
                 $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id' => $user->id,
+                    'name' => $googleUser->name,
+                    'email' => $googleUser->email,
+                    'google_id' => $googleUser->id,
                     'role' => 'customer', // Set role as 'customer'
                     'password' => encrypt('12345dummy')
                 ]);
@@ -45,9 +46,24 @@ class GoogleController extends Controller
                 Auth::login($newUser);
             }
 
-            return redirect()->intended('dashboard');
+            // Log role for debugging
+            Log::info('User Role: ' . Auth::user()->role);
+
+            // Redirect based on role
+            return $this->redirectBasedOnRole();
         } catch (Exception $e) {
+            Log::error('Google callback error: ' . $e->getMessage());
             dd($e->getMessage());
         }
+    }
+
+    protected function redirectBasedOnRole()
+    {
+        $user = Auth::user();
+        Log::info('Redirecting user role: ' . $user->role); // Log role for debugging
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('dashboard');
     }
 }
