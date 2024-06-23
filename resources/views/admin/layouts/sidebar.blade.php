@@ -4,7 +4,7 @@
     <a href="index3.html" class="brand-link">
         <img src="{{ asset('AdminLTE') }}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-light">La Tahzan</span>
     </a>
 
     <!-- Sidebar -->
@@ -26,7 +26,7 @@
                 <form method="POST" action="{{ route('logout') }}" class="mt-2">
                     @csrf
                     <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-decoration-none text-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                        <i class="fas fa-sign-out-alt"></i> &nbsp;Logout
                     </button>
                 </form>
 
@@ -270,7 +270,7 @@
 
                 <li class="nav-header">ETALASE</li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.umrah') }}" class="nav-link {{ Route::is('admin.umrah') ? 'active' : '' }}">
+                    <a href="{{ route('admin.umrah.index') }}" class="nav-link {{ Route::is('admin.umrah') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-kaaba"></i>
                         <p>
                             Dashboard Umrah
