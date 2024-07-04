@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('age')->nullable();
             $table->enum('gender', ['Pria', 'Wanita'])->nullable();
             $table->string('email')->unique();
-            $table->string('ktp')->nullable()->unique(); // Changed to nullable and unique
+            $table->string('ktp')->nullable()->unique();
             $table->string('password');
             $table->string('google_id')->nullable();
             $table->enum('role', ['admin', 'customer', 'seller'])->nullable();

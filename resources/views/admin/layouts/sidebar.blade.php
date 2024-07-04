@@ -12,7 +12,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex flex-column">
             <div class="image">
-                <img src="{{ asset('AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
+                <img src="/img/images.jpeg" class="img-circle elevation-2"
                     alt="User Image" style="width: 160px; height: 160px; object-fit: cover;">
             </div>
             <div class="info mt-3">
@@ -279,7 +279,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.otomotif') }}" class="nav-link {{ Route::is('admin.otomotif') ? 'active' : '' }}" class="nav-link">
+                    <a href="{{ route('admin.otomotif.index') }}" class="nav-link {{ Route::is('admin.otomotif') ? 'active' : '' }}" class="nav-link">
                         <i class="nav-icon fas fa-car"></i>
                         <p>
                             Dashboard Otomotif

@@ -11,12 +11,10 @@
         .action-buttons button {
             margin-bottom: 5px;
             width: 100px;
-            /* Set the width to a fixed value */
         }
 
         .action-buttons button:last-child {
             margin-bottom: 0;
-            /* Hilangkan margin untuk tombol terakhir */
         }
 
         .loading-spinner {
@@ -30,8 +28,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @media (max-width: 768px) {
@@ -50,7 +53,9 @@
                 display: none;
             }
 
-            table tbody, table tr, table td {
+            table tbody,
+            table tr,
+            table td {
                 display: block;
                 width: 100%;
             }
@@ -81,10 +86,9 @@
         <div class="card-header">
             <h1 class="card-title">Etalase Umrah</h1>
         </div>
-        <!-- /.card-header -->
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-success" onclick="redirectToInputUmrah()"> + Tambah Produk</button>
+                <button type="button" class="btn btn-success" onclick="redirectToInputUmrah()">+ Produk Umrah</button>
             </div>
             @if (session('success'))
                 <div class="alert alert-success" id="success-alert">
@@ -94,39 +98,57 @@
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Informasi Agen</th>
                         <th>Judul Produk</th>
                         <th>Deskripsi Produk</th>
+                        <th>Spesifikasi Produk</th>
                         <th>Harga</th>
-                        <th>Agen Travel</th>
-                        <th>Nomor Telefon Agen</th>
-                        <th>Maskapai</th>
-                        <th>Hotel</th>
-                        <th>Tanggal Keberangkatan</th>
-                        <th>Durasi</th>
                         <th style="display: none">Status</th>
+                        <th>Tgl. Dibuat</th>
+                        <th>Tgl. Diubah</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($umrahs as $umrah)
                         <tr id="umrah-{{ $umrah->id }}">
+                            <td>
+                                <ul>
+                                    <li data-label="Agen Travel">Nama Agen: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->agen_travel }}</span></li>
+                                    <li data-label="Nomor Telefon Agen">Nomor Telfon: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->nomor_telefon_agen }}</span>
+                                    </li>
+                                </ul>
+                            </td>
                             <td data-label="Judul Produk">{{ $umrah->judul_produk }}</td>
-                            <td data-label="Deskripsi Produk">{{ $umrah->deskripsi_produk }}</td>
-                            <td data-label="Harga">Rp.&nbsp;{{ $umrah->harga }}</td>
-                            <td data-label="Agen Travel">{{ $umrah->spesifikasi->agen_travel }}</td>
-                            <td data-label="Nomor Telefon Agen">{{ $umrah->spesifikasi->nomor_telefon_agen }}</td>
-                            <td data-label="Maskapai">{{ $umrah->spesifikasi->maskapai }}</td>
-                            <td data-label="Hotel">{{ $umrah->spesifikasi->hotel }}</td>
-                            <td data-label="Tanggal Keberangkatan">{{ $umrah->spesifikasi->tanggal_keberangkatan }}</td>
-                            <td data-label="Durasi">{{ $umrah->spesifikasi->durasi }} hari</td>
+                            <td data-label="Deskripsi Produk" style="max-width: 200px;">{{ $umrah->deskripsi_produk }}</td>
+                            <td>
+                                <ul>
+                                    <li data-label="Maskapai">Maskapai: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->maskapai }}</span></li>
+                                    <li data-label="Hotel">Hotel: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->hotel }}</span></li>
+                                    <li data-label="Tanggal Keberangkatan">Tanggal Keberangkatan: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->tanggal_keberangkatan }}</span>
+                                    </li>
+                                    <li data-label="Durasi">Durasi: <span
+                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->durasi }} hari</span></li>
+                                </ul>
+                            </td>
+                            <td data-label="Harga">Rp. {{ number_format($umrah->harga, 0, ',', '.') }}</td>
                             <td class="status" style="display:none;">{{ $umrah->status_ads }}</td>
+                            <td>{{ $umrah->created_at }}</td>
+                            <td>{{ $umrah->updated_at }}</td>
                             <td class="action-buttons">
-                                <button type="button" class="btn btn-{{ $umrah->status_ads === 'pending' ? 'success' : 'warning' }} btn-xs" id="status-button-{{ $umrah->id }}"
+                                <button type="button"
+                                    class="btn btn-{{ $umrah->status_ads === 'pending' ? 'success' : 'warning' }} btn-xs"
+                                    id="status-button-{{ $umrah->id }}"
                                     onclick="toggleStatus({{ $umrah->id }}, '{{ $umrah->status_ads }}')">
                                     {{ $umrah->status_ads === 'pending' ? '+ Etalase' : 'Sembunyikan' }}
                                 </button>
                                 <div class="loading-spinner" id="loading-{{ $umrah->id }}"></div>
-                                <button type="button" class="btn btn-primary btn-xs"
+                                 <button type="button" class="btn btn-primary btn-xs"
                                     onclick="window.location.href='{{ route('admin.umrah.edit', $umrah->id) }}'">Update</button>
                                 <button type="button" class="btn btn-danger btn-xs"
                                     onclick="confirmDelete({{ $umrah->id }})">Hapus</button>
@@ -136,13 +158,14 @@
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
     </div>
 
     <script>
         function redirectToInputUmrah() {
             window.location.href = "{{ route('admin.input.input-umrah') }}";
         }
+
+
 
         function toggleStatus(id, currentStatus) {
             let message = currentStatus === 'pending' ? 'Apakah anda akan memasukkan produk ini ke dalam etalase?' :
@@ -152,12 +175,9 @@
                 let statusButton = document.getElementById(`status-button-${id}`);
                 let loadingSpinner = document.getElementById(`loading-${id}`);
 
-                // Tampilkan spinner loading
                 loadingSpinner.style.display = 'inline-block';
-                // Nonaktifkan tombol
                 statusButton.disabled = true;
 
-                // Lakukan AJAX request untuk memperbarui status
                 fetch(`/admin/umrah/${id}/toggle-status`, {
                         method: 'PATCH',
                         headers: {
@@ -171,12 +191,12 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Perbarui status dan tombol di halaman
                             let row = document.querySelector(`#umrah-${id}`);
                             row.querySelector('.status').textContent = newStatus;
 
                             statusButton.textContent = newStatus === 'show' ? 'Sembunyikan' : '+ Etalase';
-                            statusButton.className = newStatus === 'show' ? 'btn btn-warning btn-xs' : 'btn btn-success btn-xs';
+                            statusButton.className = newStatus === 'show' ? 'btn btn-warning btn-xs' :
+                                'btn btn-success btn-xs';
                             statusButton.setAttribute('onclick', `toggleStatus(${id}, '${newStatus}')`);
                         } else {
                             alert('Terjadi kesalahan. Silakan coba lagi.');
@@ -184,7 +204,6 @@
                     })
                     .catch(error => console.error('Error:', error))
                     .finally(() => {
-                        // Sembunyikan spinner loading dan aktifkan tombol kembali
                         loadingSpinner.style.display = 'none';
                         statusButton.disabled = false;
                     });
@@ -193,34 +212,40 @@
 
         function confirmDelete(id) {
             if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-                // Lakukan AJAX request untuk menghapus data
                 fetch(`/admin/umrah/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Hapus baris dari tabel
-                            document.querySelector(`#umrah-${id}`).remove();
-                        } else {
-                            alert('Terjadi kesalahan. Silakan coba lagi.');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`#umrah-${id}`).remove();
+                    } else {
+                        alert('Terjadi kesalahan. Silakan coba lagi.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                });
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Menghilangkan alert setelah 5 detik
             let successAlert = document.getElementById('success-alert');
             if (successAlert) {
                 setTimeout(function() {
                     successAlert.style.display = 'none';
-                }, 5000); // 5000 ms = 5 detik
+                }, 5000);
             }
         });
     </script>

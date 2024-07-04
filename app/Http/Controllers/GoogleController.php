@@ -39,7 +39,7 @@ class GoogleController extends Controller
                     'name' => $googleUser->name,
                     'email' => $googleUser->email,
                     'google_id' => $googleUser->id,
-                    'role' => 'customer', // Set role as 'customer'
+                    'role' => 'admin', // Set role as 'customer'
                     'password' => encrypt('12345dummy')
                 ]);
 

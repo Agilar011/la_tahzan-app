@@ -128,7 +128,7 @@ class UmrahController extends Controller
         // Hapus spesifikasi yang terkait
         SpesifikasiUmrah::where('umrah_id', $id)->delete();
 
-        // Hapus data umrah
+        // Hapus data otomotif
         $umrah->delete();
 
         return response()->json(['success' => true]);
