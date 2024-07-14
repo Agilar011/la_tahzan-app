@@ -5,6 +5,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UmrahController;
 use App\Http\Controllers\OtomotifController;
+use App\Http\Controllers\PropertiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,13 +48,21 @@ Route::middleware([
                 Route::put('/{id}', [OtomotifController::class, 'update'])->name('update');
                 Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
                 Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
-
-
             });
 
-            Route::get('properti', function () {
-                return view('admin.properti');
-            })->name('properti');
+            Route::prefix('properti')->name('properti.')->group(function () {
+                Route::get('/', [PropertiController::class, 'index'])->name('index');
+                Route::get('/create', [PropertiController::class, 'create'])->name('create');
+                Route::post('/', [PropertiController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [PropertiController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
+                Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
+                Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
+            });
+
+            // Route::get('properti', function () {
+            //     return view('admin.properti');
+            // })->name('properti');
         });
 
         Route::middleware(['customer'])->group(function () {
@@ -61,7 +70,6 @@ Route::middleware([
                 return view('dashboard');
             })->name('dashboard');
         });
-
     });
 });
 

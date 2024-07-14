@@ -270,7 +270,7 @@
 
                 <li class="nav-header">ETALASE</li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.umrah.index') }}" class="nav-link {{ Route::is('admin.umrah') ? 'active' : '' }}">
+                    <a href="{{ route('admin.umrah.index') }}" class="nav-link {{ Route::is('admin.umrah.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-kaaba"></i>
                         <p>
                             Dashboard Umrah
@@ -279,7 +279,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.otomotif.index') }}" class="nav-link {{ Route::is('admin.otomotif') ? 'active' : '' }}" class="nav-link">
+                    <a href="{{ route('admin.otomotif.index') }}" class="nav-link {{ Route::is('admin.otomotif.index') ? 'active' : '' }}" class="nav-link">
                         <i class="nav-icon fas fa-car"></i>
                         <p>
                             Dashboard Otomotif
@@ -288,7 +288,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.properti') }}" class="nav-link {{ Route::is('admin.properti') ? 'active' : '' }}" class="nav-link">
+                    <a href="{{ route('admin.properti.index') }}" class="nav-link {{ Route::is('admin.properti.index') ? 'active' : '' }}" class="nav-link">
                         <i class="nav-icon fas fa-building"></i>
                         <p>
                             Dashboard Properti
