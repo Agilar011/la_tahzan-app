@@ -33,7 +33,6 @@
             </div>
         </div>
 
-
         <div class="flex flex-col bg-cover bg-center"
             style="background-image: url('/img/thumbnail property.webp'); min-width: 33.33%;">
             <div class="bg-black bg-opacity-50 text-white text-center min-h-[470px] flex flex-col justify-between">
@@ -58,22 +57,31 @@
         </div>
 
         <div class="flex flex-wrap justify-center mt-8">
-            @foreach ($umrah as $item)
-            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-4 w-full md:w-1/3 lg:w-1/4 ">
-                <img src="/img/produk umroh 1.jpg" alt="Umrah Package" class="w-full h-64 object-contain cursor-pointer" id="thumbnail1">
+            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-4">
+                <img src="/img/produk umroh 1.jpg" alt="Umrah Package" class="w-full h-64 object-contain cursor-pointer"
+                    id="thumbnail1">
                 <a href="#">
                     <div class="p-6">
-                        <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
-                        <p class="mt-2 text-xl">{{ $item->judul_produk}}</p>
-                        <p class="mt-2 text-gray-500 text-xl">{{ $item->deskripsi_produk}}</p>
+                        <h2 class="font-bold text-xl">Umrah Package 1</h2>
+                        <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                            libero eros.</p>
                     </div>
                 </a>
             </div>
 
-            @endforeach
+            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-4">
+                <img src="/img/produk umroh 2.jpg" alt="Umrah Package" class="w-full h-64 object-cover cursor-pointer"
+                    id="thumbnail2">
+                <a href="#">
+                    <div class="p-6">
+                        <h2 class="font-bold text-xl">Umrah Package 2</h2>
+                        <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                            libero eros.</p>
+                    </div>
+                </a>
+            </div>
+
         </div>
-
-
 
 
     </div>
@@ -90,25 +98,50 @@
 
         </div>
 
-        <div class="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
-            @foreach ($otomotif as $item)
+        <div class="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                 <img src="/img/produk otomotif 1.webp" alt="Automotive Product"
-                class="w-full h-64 object-cover cursor-pointer" id="thumbnail3">
+                    class="w-full h-64 object-cover cursor-pointer" id="thumbnail3">
                 <div class="p-6">
-                    <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
-                    <p class="mt-2 text-lg">{{ $item->judul_produk}}</p>
+                    <h2 class="font-bold text-xl">Automotive Product 1</h2>
+                    <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                        libero eros.</p>
                 </div>
-                </div>
-                @endforeach
+            </div>
 
+            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+                <img src="/img/produk otomotif 2.webp" alt="Automotive Product"
+                    class="w-full h-64 object-cover cursor-pointer" id="thumbnail4">
+                <div class="p-6">
+                    <h2 class="font-bold text-xl">Automotive Product 2</h2>
+                    <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                        libero eros.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+                <img src="/img/produk otomotif 3.webp" alt="Automotive Product"
+                    class="w-full h-64 object-cover cursor-pointer" id="thumbnail5">
+                <div class="p-6">
+                    <h2 class="font-bold text-xl">Automotive Product 3</h2>
+                    <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                        libero eros.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+                <img src="/img/produk otomotif 4.webp" alt="Automotive Product"
+                    class="w-full h-64 object-cover cursor-pointer" id="thumbnail6">
+                <div class="p-6">
+                    <h2 class="font-bold text-xl">Automotive Product 4</h2>
+                    <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                        libero eros.</p>
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-col items-center justify-center mt-8">
-            <a href="{{ route('otomotif.index') }}"
-
-                class="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-400 transition duration-300 hover:text-black">
-
+            <a href="#" class="px-4 py-2 bg-slate-800 rounded-lg text-white hover:bg-slate-400 hover:text-black ">
                 <h1 class="text-xl font-bold ">Etalase Otomotif</h1>
             </a>
             {{-- <p class="text-gray-500 text-center mt-4">Choose the best property products that suit your needs</p> --}}
@@ -122,17 +155,16 @@
             <p class="text-gray-500 text-center mt-4">Choose the best property products that suit your needs</p>
         </div>
 
-        <div class="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
-            @foreach ($property as $item)
+        <div class="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                 <img src="/img/produk property 1.webp" alt="Property Product"
-                class="w-full h-64 object-cover cursor-pointer" id="thumbnail7">
+                    class="w-full h-64 object-cover cursor-pointer" id="thumbnail7">
                 <div class="p-6">
-                    <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
-                    <p class="mt-2 text-lg">{{ $item->judul_produk}}</p>
-                    </div>
+                    <h2 class="font-bold text-xl">Property Product 1</h2>
+                    <p class="mt-4 text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet
+                        libero eros.</p>
                 </div>
-                @endforeach
+            </div>
 
             <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                 <img src="/img/produk property 2.webp" alt="Property Product"
