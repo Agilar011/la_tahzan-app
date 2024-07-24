@@ -16,20 +16,20 @@
 
 <div class="relative">
     <div class="carousel" id="carousel">
-        <div class="carousel-item flex justify-center items-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 1" class="w-auto h-[500px] object-cover">
+        <div class="carousel-item flex justify-center">
+            <img src="/img/thumbnail otomotif.jpg" alt="Image 1" class="w-auto h-[500px] object-cover sm::object-contain">
         </div>
-        <div class="carousel-item flex justify-center items-center">
-            <img src="/img/thumbnail umrah.jpg" alt="Placeholder Image 2" class="w-auto h-[500px] object-contain">
+        <div class="carousel-item flex justify-center">
+            <img src="/img/thumbnail umrah.jpg" alt="Placeholder Image 2" class="w-auto h-[500px] object-cover sm::object-contain">
         </div>
-        <div class="carousel-item flex justify-center items-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 3" class="w-auto h-[500px] object-cover">
+        <div class="carousel-item flex justify-center">
+            <img src="/img/thumbnail otomotif.jpg" alt="Image 3" class="w-auto h-[500px] object-cover sm::object-contain">
         </div>
-        <div class="carousel-item flex justify-center items-center">
-            <img src="/img/thumbnail umrah.jpg" alt="Image 4" class="w-auto h-[500px] object-cover">
+        <div class="carousel-item flex justify-center">
+            <img src="/img/thumbnail umrah.jpg" alt="Image 4" class="w-auto h-[500px] object-cover sm::object-contain">
         </div>
-        <div class="carousel-item flex justify-center items-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 5" class="w-auto h-[500px] object-cover">
+        <div class="carousel-item flex justify-center">
+            <img src="/img/thumbnail otomotif.jpg" alt="Image 5" class="w-auto h-[500px] object-cover sm::object-contain">
         </div>
     </div>
 
@@ -83,8 +83,8 @@
 
 
     {{-- Section 3 Product --}}
-    <div class="grid w-1/2 md:flex flex-wrap justify-center w-11/12 mx-auto mt-10">
-        <div class="md:flex flex-col bg-cover bg-center mx-2 "
+    <div class="w-full sm:grid w-1/2 md:flex flex-wrap justify-center w-11/12 mx-auto mt-10">
+        <div class="my-2 md:flex flex-col bg-cover bg-center mx-2 "
             style="background-image: url('/img/thumbnail umrah.jpg'); min-width: 30%;">
             <div class="bg-black bg-opacity-50 text-white text-center min-h-[210px] flex flex-col justify-between">
                 <div class="mt-auto mb-11 py-8">
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col bg-cover bg-center mx-2 "
+        <div class="my-2 flex flex-col bg-cover bg-center mx-2 "
             style="background-image: url('/img/thumbnail otomotif.jpg'); min-width: 30%;">
             <div class="bg-black bg-opacity-50 text-white text-center min-h-[200px] flex flex-col justify-between">
                 <div class="mt-auto mb-11 py-8">
@@ -115,7 +115,7 @@
         </div>
 
 
-        <div class="flex flex-col bg-cover bg-center mx-2"
+        <div class="my-2 flex flex-col bg-cover bg-center mx-2"
             style="background-image: url('/img/thumbnail property.webp'); min-width: 30%;">
             <div class="bg-black bg-opacity-50 text-white text-center min-h-[200px] flex flex-col justify-between">
                 <div class="mt-auto mb-11 py-8">
@@ -242,7 +242,7 @@
 
         </div>
 
-        <div class="flex flex-col items-center justify-center mt-8">
+        <div class="flex flex-col items-center justify-center my-8">
             <a href="#" class="px-4 py-2 bg-slate-800 rounded-lg text-white hover:bg-slate-400 hover:text-black ">
                 <h1 class="text-xl font-bold ">Etalase Property</h1>
             </a>
