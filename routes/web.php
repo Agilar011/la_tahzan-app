@@ -20,6 +20,8 @@ Route::prefix('otomotif')->name('otomotif.')->group(function () {
     Route::put('/{id}', [OtomotifController::class, 'update'])->name('update');
     Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
+    Route::get('/{id}/spesifikasi', [OtomotifController::class, 'spesifikasi'])->name('spesifikasi');
+
 });
 
 
