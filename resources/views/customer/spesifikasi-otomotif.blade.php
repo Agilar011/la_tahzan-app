@@ -4,42 +4,40 @@
 <div class="container mx-auto sm:p-4 bg-gray-100 min-w-full">
     <div class="bg-white rounded-lg flex flex-col sm:p-2 lg:flex-row">
         <!-- Carousel -->
-        <div class="w-full lg:w-1/2">
-            <div class="grid">
+        <div class="w-full lg:w-2/3">
+            <div class="grid gap-y-2">
                 <div class="rounded-xl">
                     <img src="/img/produk otomotif 1.webp" alt="Gambar Utama" id="mainImage"
-                        class="w-full h-48 object-cover">
+                        class="w-full h-96 object-cover rounded-xl">
                 </div>
-                <div class="flex">
-                    <div class="w-1/3">
+                <div class="flex flex-col gap-x-2 justify-center sm:flex-row sm:flex-wrap">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-                    <div class="w-1/3">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-                    <div class="w-1/3">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-                </div>
-                    <div class="flex">
 
-                    <div class="w-1/4">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-                    <div class="w-1/4">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 5"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-                    <div class="w-1/4">
+                    <div class="w-full sm:w-32">
                         <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 6"
-                            class="w-full h-30 object-cover thumbnail">
+                            class="w-full h-40 object-cover thumbnail rounded-lg">
                     </div>
-
                 </div>
+
             </div>
 
             <script>
@@ -60,8 +58,9 @@
 
         <!-- Product Details -->
         <div class="w-full lg:w-1/2 lg:pl-8 ">
-            <p class="text-2xl text-gray-900 mb-4 font-bold">Rp. {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
+            <p class="block sm:hidden text-2xl text-gray-900 mb-4 font-bold">Rp. {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
             <h1 class="text-4xl font-bold mb-4">{{ $otomotif->judul_produk }}</h1>
+            <p class="text-2xl text-gray-900 mb-4 font-bold">Rp. {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
             <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate rem quis sed assumenda voluptatum deleniti pariatur vel animi aliquid, quibusdam provident quia? Modi, officiis? Ea fuga porro quibusdam quidem omnis.</p>
             <table class="table-auto w-full mb-4">
                 <tbody>
@@ -108,20 +107,20 @@
             </button>
         </div>
     </div>
+{{-- Section Seller --}}
+    <div class="flex bg-white w-full p-5 rounded-lg mt-5">
+        <div class="flex w-full justify-between divide-x-4">
 
-    <div class="flex bg-white w-full p-5 rounded-lg mt-5 items-center justify-center">
-
-        <div class="flex min-w-2/3 px-5 justify-between justify-center">
-            <!-- Div untuk informasi pengguna -->
-            <div class="flex items-center text-center">
+            <!-- Div untuk informasi Seller -->
+            <div class="flex items-center text-center ">
                 <i class="fa-solid fa-user fa-2xl" style="color: #000000;"></i>
                 <p class="ml-2">{{ $otomotif->name }}</p>
             </div>
 
             <!-- Div untuk informasi produk dan bergabung -->
-            <div class="flex">
+            <div class="flex w-1/3 justify-between divide-x-4">
                 <!-- Div untuk jumlah produk -->
-                <div class="text-center mx-4">
+                <div class="text-center w-full">
                     <div class="flex items-center justify-center">
                         <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #B197FC;"></i>
                         <p class="ml-2">{{ $otomotif->jumlahProduk }}</p>
@@ -130,7 +129,7 @@
                 </div>
 
                 <!-- Div untuk lama bergabung -->
-                <div class="text-center mx-4">
+                <div class="text-center w-full">
                     <div class="flex items-center justify-center">
                         <i class="fa-solid fa-hourglass-start fa-2xl"></i>
                         <p class="ml-2">{{ $otomotif->sellerBergabung }}</p>
