@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         UserSeeder::class,
         OtomotifSeeder::class,
         SpesifikasiOtomotifSeeder::class,
+        UmrahSeeder::class,
         // seeder lainnya jika ada
     ]);
 }
