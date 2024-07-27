@@ -171,100 +171,92 @@
                     <h3 class="card-title">Foto Produk (Min. 1 & masing - masing maks. 5 MB)</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        @foreach ($properti->fotos as $foto)
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Foto {{ $loop->index + 1 }}</label>
-                                    <div class="custom-file">
-                                        <input type="file" name="foto[]" class="custom-file-input"
-                                            id="customFile{{ $loop->index + 1 }}" accept=".jpg,.jpeg,.png,.svg">
-                                        <label class="custom-file-label"
-                                            for="customFile{{ $loop->index + 1 }}">{{ basename($foto->path) }}</label>
-                                    </div>
-                                    <small class="form-text text-muted">Abaikan jika tidak ingin diganti.</small>
-                                </div>
-                            </div>
-                        @endforeach
-                        @for ($i = count($properti->fotos); $i < 6; $i++)
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Foto {{ $i + 1 }}</label>
-                                    <div class="custom-file">
-                                        <input type="file" name="foto[]" class="custom-file-input"
-                                            id="customFile{{ $i + 1 }}" accept=".jpg,.jpeg,.png,.svg">
-                                        <label class="custom-file-label" for="customFile{{ $i + 1 }}">Choose
-                                            file</label>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach ($properti->fotos as $foto)
+                                <div class="col-sm-2">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        <label>Foto {{ $loop->index + 1 }}</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="foto[]" class="custom-file-input"
+                                                id="customFile{{ $loop->index + 1 }}" accept=".jpg,.jpeg,.png,.svg">
+                                            <label class="custom-file-label"
+                                                for="customFile{{ $loop->index + 1 }}">{{ basename($foto->path) }}</label>
+                                        </div>
+                                        <small class="form-text text-muted">Abaikan jika tidak ingin diganti.</small>
                                     </div>
                                 </div>
-                            </div>
-                        @endfor
+                            @endforeach
+                            @for ($i = count($properti->fotos); $i < 6; $i++)
+                                <div class="col-sm-2">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        <label>Foto {{ $i + 1 }}</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="foto[]" class="custom-file-input"
+                                                id="customFile{{ $i + 1 }}" accept=".jpg,.jpeg,.png,.svg">
+                                            <label class="custom-file-label" for="customFile{{ $i + 1 }}">Choose
+                                                file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Update</button>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{{ route('admin.properti.index') }}" class="btn btn-secondary">Back</a>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        function updateFileName(input) {
-            var fileName = input.files[0].name;
-            var label = input.nextElementSibling;
-            label.innerText = fileName;
-        }
-
-        function handleJenisPropertiChange() {
-            var jenisProperti = document.getElementById('jenis_properti').value;
-            var luasBangunan = document.getElementById('luas_bangunan');
-            var jumlahKamarTidur = document.getElementById('jumlah_kamar_tidur');
-            var jumlahKamarMandi = document.getElementById('jumlah_kamar_mandi');
-
-            if (jenisProperti === 'Tanah') {
-                luasBangunan.disabled = true;
-                jumlahKamarTidur.disabled = true;
-                jumlahKamarMandi.disabled = true;
-                luasBangunan.value = '';
-                jumlahKamarTidur.value = '';
-                jumlahKamarMandi.value = '';
-            } else {
-                luasBangunan.disabled = false;
-                jumlahKamarTidur.disabled = false;
-                jumlahKamarMandi.disabled = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to update file name label
+            function updateFileName(input) {
+                var fileName = input.files[0].name;
+                var label = input.nextElementSibling;
+                label.innerText = fileName;
             }
-        }
 
-        document.getElementById('kota').addEventListener('change', function() {
-            var provinsiInput = document.getElementById('provinsi');
-            provinsiInput.value = 'Jawa Timur';
-        });
+            // Function to handle jenis properti change
+            function handleJenisPropertiChange() {
+                var jenisProperti = document.getElementById('jenis_properti').value;
+                var luasBangunan = document.getElementById('luas_bangunan');
+                var jumlahKamarTidur = document.getElementById('jumlah_kamar_tidur');
+                var jumlahKamarMandi = document.getElementById('jumlah_kamar_mandi');
 
-        document.getElementById('jenis_properti').addEventListener('change', handleJenisPropertiChange);
+                if (jenisProperti === 'Tanah') {
+                    luasBangunan.disabled = true;
+                    jumlahKamarTidur.disabled = true;
+                    jumlahKamarMandi.disabled = true;
+                    luasBangunan.value = '';
+                    jumlahKamarTidur.value = '';
+                    jumlahKamarMandi.value = '';
+                } else {
+                    luasBangunan.disabled = false;
+                    jumlahKamarTidur.disabled = false;
+                    jumlahKamarMandi.disabled = false;
+                }
+            }
 
-        // Initial check on page load
-        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener for kota change
+            document.getElementById('kota').addEventListener('change', function() {
+                var provinsiInput = document.getElementById('provinsi');
+                provinsiInput.value = 'Jawa Timur';
+            });
+
+            // Event listener for jenis properti change
+            document.getElementById('jenis_properti').addEventListener('change', handleJenisPropertiChange);
+
+            // Initial check on page load
             handleJenisPropertiChange();
-        });
 
-        // // Handle automatic photo slot filling
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     document.querySelectorAll('.custom-file-input').forEach(function(input, index) {
-        //         input.addEventListener('change', function() {
-        //             var emptySlots = document.querySelectorAll('.custom-file-input:not([value])');
-        //             if (emptySlots.length > 0) {
-        //                 var newInput = emptySlots[0];
-        //                 newInput.value = input.value;
-        //                 newInput.nextElementSibling.innerText = input.files[0].name;
-        //                 input.value = ''; // Clear the original input
-        //             }
-        //         });
-        //     });
-        // });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+            // Function to allow only numbers for input
             function allowOnlyNumbers(event) {
                 if ([46, 8, 9, 27, 13].indexOf(event.keyCode) !== -1 ||
                     (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
@@ -277,22 +269,24 @@
                 }
             }
 
+            // Function to format number to Rupiah currency
             function formatRupiah(angka, prefix) {
                 var number_string = angka.replace(/[^,\d]/g, '').toString(),
                     split = number_string.split(','),
                     sisa = split[0].length % 3,
                     rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                    ribuan = split[0].substr(sisa).match(/\d{3}/g);
 
                 if (ribuan) {
                     let separator = sisa ? '.' : '';
                     rupiah += separator + ribuan.join('.');
                 }
 
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+                rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix === undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
             }
 
+            // Function to validate file size (max 5 MB)
             function validateFileSize(fileInput) {
                 const maxSize = 5 * 1024 * 1024; // 5 MB
                 const files = fileInput.files;
@@ -307,10 +301,41 @@
                 return true;
             }
 
-            document.getElementById('harga').addEventListener('keydown', allowOnlyNumbers);
-            document.getElementById('harga').addEventListener('keyup', function(e) {
-                this.value = formatRupiah(this.value, 'Rp. ');
-            });
+            // Event listener for file input changes
+            // document.querySelectorAll('.custom-file-input').forEach(input => {
+            //     input.addEventListener('change', function(e) {
+            //         if (validateFileSize(e.target)) {
+            //             const fileName = e.target.files[0].name;
+            //             const label = e.target.nextElementSibling;
+            //             label.textContent = fileName;
+            //         }
+            //     });
+            // });
+
+            // Event listener for form submission
+            // const propertiForm = document.getElementById('propertiForm');
+            // propertiForm.addEventListener('submit', function(e) {
+            //     const fotoInputs = document.querySelectorAll('input[type="file"]');
+            //     let fotoCount = 0;
+
+            //     fotoInputs.forEach(function(input) {
+            //         if (input.files.length > 0) {
+            //             fotoCount++;
+            //             if (!validateFileSize(input)) {
+            //                 e.preventDefault();
+            //             }
+            //         }
+            //     });
+
+            //     if (fotoCount < 1 && {{ count($properti->fotos) }} == 0) {
+            //         e.preventDefault();
+            //         alert('Anda harus mengunggah minimal 1 foto.');
+            //     }
+
+            //     // Remove formatting before form submission
+            //     const hargaInput = document.getElementById('harga');
+            //     hargaInput.value = hargaInput.value.replace(/[^,\d]/g, '');
+            // });
 
             document.getElementById('propertiForm').addEventListener('submit', function(e) {
                 var fotoInputs = document.querySelectorAll('input[name="foto[]"]');
@@ -342,6 +367,13 @@
                         label.textContent = fileName;
                     }
                 });
+            });
+
+            // Event listener for harga input field
+            const hargaInput = document.getElementById('harga');
+            hargaInput.addEventListener('keydown', allowOnlyNumbers);
+            hargaInput.addEventListener('keyup', function(e) {
+                this.value = formatRupiah(this.value, 'Rp. ');
             });
         });
     </script>

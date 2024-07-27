@@ -46,8 +46,12 @@
                             <div class="form-group">
                                 <label>Kota</label>
                                 <select name="kota" class="form-control" id="kota" required>
-                                    <option value="Kota Blitar" {{ old('kota', $properti->spesifikasi->kota ?? '') == 'Kota Blitar' ? 'selected' : '' }}>Kota Blitar</option>
-                                    <option value="Kabupaten Blitar" {{ old('kota', $properti->spesifikasi->kota ?? '') == 'Kabupaten Blitar' ? 'selected' : '' }}>Kabupaten Blitar</option>
+                                    <option value="Kota Blitar"
+                                        {{ old('kota', $properti->spesifikasi->kota ?? '') == 'Kota Blitar' ? 'selected' : '' }}>
+                                        Kota Blitar</option>
+                                    <option value="Kabupaten Blitar"
+                                        {{ old('kota', $properti->spesifikasi->kota ?? '') == 'Kabupaten Blitar' ? 'selected' : '' }}>
+                                        Kabupaten Blitar</option>
                                 </select>
                             </div>
                         </div>
@@ -55,8 +59,8 @@
                             <div class="form-group">
                                 <label>Provinsi</label>
                                 <input type="text" name="provinsi" id="provinsi" class="form-control"
-                                    value="{{ old('provinsi', $properti->spesifikasi->provinsi ?? '') }}" placeholder="Enter ..."
-                                    required readonly>
+                                    value="{{ old('provinsi', $properti->spesifikasi->provinsi ?? '') }}"
+                                    placeholder="Enter ..." required readonly>
                             </div>
                         </div>
                     </div>
@@ -65,8 +69,8 @@
                             <div class="form-group">
                                 <label>Alamat</label>
                                 <input type="text" name="alamat" class="form-control"
-                                    value="{{ old('alamat', $properti->spesifikasi->alamat ?? '') }}" placeholder="Enter ..."
-                                    required>
+                                    value="{{ old('alamat', $properti->spesifikasi->alamat ?? '') }}"
+                                    placeholder="Enter ..." required>
                             </div>
                         </div>
                     </div>
@@ -82,9 +86,15 @@
                             <div class="form-group">
                                 <label>Jenis Properti</label>
                                 <select name="jenis_properti" class="form-control" id="jenis_properti" required>
-                                    <option value="Rumah" {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Rumah' ? 'selected' : '' }}>Rumah</option>
-                                    <option value="Tanah" {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Tanah' ? 'selected' : '' }}>Tanah</option>
-                                    <option value="Apartemen" {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Apartemen' ? 'selected' : '' }}>Apartemen</option>
+                                    <option value="Rumah"
+                                        {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Rumah' ? 'selected' : '' }}>
+                                        Rumah</option>
+                                    <option value="Tanah"
+                                        {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Tanah' ? 'selected' : '' }}>
+                                        Tanah</option>
+                                    <option value="Apartemen"
+                                        {{ old('jenis_properti', $properti->spesifikasi->jenis_properti ?? '') == 'Apartemen' ? 'selected' : '' }}>
+                                        Apartemen</option>
                                 </select>
                             </div>
                         </div>
@@ -121,7 +131,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Jumlah Kamar Mandi</label>
-                                <input type="number" name="jumlah_kamar_mandi" id="jumlah_kamar_mandi" class="form-control"
+                                <input type="number" name="jumlah_kamar_mandi" id="jumlah_kamar_mandi"
+                                    class="form-control"
                                     value="{{ old('jumlah_kamar_mandi', $properti->spesifikasi->jumlah_kamar_mandi ?? '') }}"
                                     placeholder="Enter ..." required>
                             </div>
@@ -155,58 +166,26 @@
                 </div>
 
                 <div class="card-header bg-primary text-white">
-                    <h3 class="card-title">Foto Properti (Min. 1, Maks. 6)</h3>
+                    <h3 class="card-title">Foto Properti (Min. 1, Max. 6)</h3>
                 </div>
+                <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        @isset($properti)
-                            @foreach ($properti->fotos as $foto)
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label>Foto {{ $loop->index + 1 }}</label>
-                                        <div class="custom-file">
-                                            <input type="file" name="foto[]" class="custom-file-input"
-                                                id="customFile{{ $loop->index + 1 }}" accept=".jpg,.jpeg,.png,.svg"
-                                                onchange="updateFileName(this)">
-                                            <label class="custom-file-label"
-                                                for="customFile{{ $loop->index + 1 }}">{{ basename($foto->path) }}</label>
-                                        </div>
-                                    </div>
+                        @for ($i = 1; $i <= 6; $i++)
+                        <div class="col-sm-2">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Foto {{ $i }}</label>
+                                <div class="custom-file">
+                                  <input type="file" name="foto[]" class="custom-file-input" id="customFile{{ $i }}" accept=".jpg,.jpeg,.png,.svg" onchange="updateFileName(this)">
+                                  <label class="custom-file-label" for="customFile{{ $i }}">Choose file</label>
                                 </div>
-                            @endforeach
-                            @for ($i = count($properti->fotos); $i < 6; $i++)
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label>Foto {{ $i + 1 }}</label>
-                                        <div class="custom-file">
-                                            <input type="file" name="foto[]" class="custom-file-input"
-                                                id="customFile{{ $i + 1 }}" accept
-                                                .jpg,.jpeg,.png,.svg"
-                                                onchange="updateFileName(this)">
-                                            <label class="custom-file-label" for="customFile{{ $i + 1 }}">Choose
-                                                file</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endfor
-                        @else
-                            @for ($i = 0; $i < 6; $i++)
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label>Foto {{ $i + 1 }}</label>
-                                        <div class="custom-file">
-                                            <input type="file" name="foto[]" class="custom-file-input"
-                                                id="customFile{{ $i + 1 }}" accept=".jpg,.jpeg,.png,.svg"
-                                                onchange="updateFileName(this)">
-                                            <label class="custom-file-label" for="customFile{{ $i + 1 }}">Choose
-                                                file</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endfor
-                        @endisset
+                            </div>
+                        </div>
+                        @endfor
                     </div>
                 </div>
+
                 <div class="card-footer">
                     <button type="submit" class="btn btn-success">Simpan</button>
                 </div>

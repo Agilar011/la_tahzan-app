@@ -139,7 +139,8 @@
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Foto {{ $loop->index + 1 }}</label>
-                                <div class="custom-file">
+                                <div class="custom-file d-flex align-items-center">
+                                  <img src="{{ Storage::url('foto_otomotif/' . $foto->path) }}" alt="Foto" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
                                   <input type="file" name="foto[]" class="custom-file-input" id="customFile{{ $loop->index + 1 }}" accept=".jpg,.jpeg,.png,.svg">
                                   <label class="custom-file-label" for="customFile{{ $loop->index + 1 }}">{{ basename($foto->path) }}</label>
                                 </div>
@@ -151,7 +152,8 @@
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Foto {{ $i + 1 }}</label>
-                                <div class="custom-file">
+                                <div class="custom-file d-flex align-items-center">
+                                  <img src="{{ asset('path/to/default_image.png') }}" alt="Foto" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
                                   <input type="file" name="foto[]" class="custom-file-input" id="customFile{{ $i + 1 }}" accept=".jpg,.jpeg,.png,.svg">
                                   <label class="custom-file-label" for="customFile{{ $i + 1 }}">Choose file</label>
                                 </div>

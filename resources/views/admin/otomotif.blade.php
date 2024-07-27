@@ -87,9 +87,22 @@
             <h1 class="card-title">Otomotif</h1>
         </div>
         <div class="card-body">
+            @php
+                $user = auth()->user();
+                $phoneFilled = !empty($user->phone);
+                $addressFilled = !empty($user->address);
+            @endphp
+
+            @if (!$phoneFilled || !$addressFilled)
+                <div class="alert alert-warning">
+                    <strong>Peringatan!</strong> Kamu belum mengisi Nomor Telfon dan Alamat mu. Silahkan isi dulu untuk menambahkan produk. <a href="{{ route('profile.show') }}" class="btn btn-primary btn-sm">Go to Profile</a>
+                </div>
+            @endif
+
             <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('admin.otomotif.create') }}" class="btn btn-success">+ Produk Otomotif</a>
+                <a href="{{ route('admin.otomotif.create') }}" class="btn btn-success {{ !$phoneFilled || !$addressFilled ? 'disabled' : '' }}">+ Produk Otomotif</a>
             </div>
+
             @if (session('success'))
                 <div class="alert alert-success" id="success-alert">
                     {{ session('success') }}

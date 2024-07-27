@@ -70,15 +70,16 @@ class PropertiController extends Controller
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
                 $path = $file->store('public/foto_properti');
-                $foto = new FotoProperti();
-                $foto->properti_id = $properti->id;
-                $foto->path = $path;
-                $foto->save();
+                FotoProperti::create([
+                    'properti_id' => $properti->id,
+                    'path' => $path
+                ]);
             }
         }
 
         return redirect()->route('admin.properti.index')->with('success', 'Properti created successfully.');
     }
+
 
     public function edit($id)
     {
@@ -105,13 +106,13 @@ class PropertiController extends Controller
             'foto.*' => 'image|mimes:jpeg,png,jpg,svg|max:5120' // Validasi file foto
         ]);
 
-        $properti = Properti::findOrFail($id);
+        $properti = Properti::find($id);
         $properti->judul_produk = $request->judul_produk;
         $properti->deskripsi_produk = $request->deskripsi_produk;
         $properti->harga = $request->harga;
         $properti->save();
 
-        $spesifikasi = SpesifikasiProperti::where('properti_id', $properti->id)->first();
+        $spesifikasi = SpesifikasiProperti::where('properti_id', $id)->first();
         $spesifikasi->alamat = $request->alamat;
         $spesifikasi->kota = $request->kota;
         $spesifikasi->provinsi = $request->provinsi;
@@ -125,26 +126,16 @@ class PropertiController extends Controller
         $spesifikasi->save();
 
         if ($request->hasFile('foto')) {
-            $foto_existing = $request->input('foto_existing', []);
-            foreach ($request->file('foto') as $key => $file) {
-                if (isset($foto_existing[$key])) {
-                    // Replace existing photo
-                    $foto = FotoProperti::where('path', $foto_existing[$key])->first();
-                    if ($foto) {
-                        Storage::delete($foto->path);
-                        $path = $file->store('public/foto_properti');
-                        $foto->update(['path' => $path]);
-                    }
-                } else {
-                    // Add new photo
-                    $path = $file->store('public/foto_properti');
-                    FotoProperti::create([
-                        'properti_id' => $properti->id,
-                        'path' => $path
-                    ]);
-                }
+            // Simpan foto baru
+            foreach ($request->file('foto') as $file) {
+                $path = $file->store('public/foto_properti');
+                FotoProperti::create([
+                    'properti_id' => $properti->id,
+                    'path' => $path
+                ]);
             }
         }
+
         return redirect()->route('admin.properti.index')->with('success', 'Properti updated successfully.');
     }
 
