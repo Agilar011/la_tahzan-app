@@ -33,24 +33,24 @@
 <body class="font-sans antialiased">
     @vite('resources/css/app.css')
     <nav class="bg-slate-800 p-4 sticky top-0 z-50 gap-x-84">
-        <div class="grid sm:flex justify-between items-center">
+        <div class="flex justify-between items-center">
             <!-- Logo Section -->
             <div class="flex justify-between mb-2">
                 <div>
-                    <img src="/img/la tahzan.png" alt="Logo" class="h-12">
+                    <img src="/img/la tahzan.png" alt="Logo" class="h-[40px] object-contain" >
                 </div>
 
                 <!-- Hamburger Menu (Mobile) -->
-                <div class="md:hidden">
+                {{-- <div class="md:hidden">
                     <button id="menu-toggle" class="text-white focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div> --}}
             </div>
-        </div>
 
             <!-- Navigation Links (Desktop) -->
             <div class="hidden md:block px-2 py-2">
@@ -60,13 +60,22 @@
                     <li><a href="/contact" class="text-white">Otomotif</a></li>
                 </ul>
             </div>
-
-            <div class="flex items-center w-full bg-black rounded-lg border border-black min-w-[300px] mx-4">
-                {{-- <input type="text"> --}}
+{{-- SearchBar --}}
+            <div class="hidden sm:flex items-center w-full rounded-lg border border-black min-w-[300px] mx-4">
                 <input type="text" placeholder="Apa yang anda cari???..."
                     class="w-full px-4 py-2 rounded-l-lg border border-black">
                 <button class="bg-gray-600 text-white px-4 py-2 rounded-r-lg border border-black"><i
                         class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
             </div>
 
 
@@ -101,6 +110,16 @@
                 <li><a href="/login" class="text-white">Login</a></li>
                 <li><a href="/register" class="text-white">Register</a></li>
             </ul>
+        </div>
+
+        <div class="flex mx-auto sm:hidden">
+<div class="flex items-center w-full bg-black rounded-lg border border-black min-w-[300px]">
+                {{-- <input type="text"> --}}
+                <input type="text" placeholder="Apa yang anda cari???..."
+                    class="w-full px-4 py-2 rounded-l-lg border border-black">
+                <button class="bg-gray-600 text-white px-4 py-2 rounded-r-lg border border-black"><i
+                        class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
         </div>
     </nav>
 

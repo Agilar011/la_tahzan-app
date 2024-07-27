@@ -1,11 +1,10 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="grid mx-auto mt-10 sm:flex">
-
+    <div class="grid mx-auto mt-10 md:flex">
 
         <!-- Sidebar -->
-        <div id="sidebar" class="min-w-1/2 p-4 sm:w-2/12 ">
+        <div id="sidebar" class="min-w-1/2 p-4 hidden ">
             <span class="flex text-center items-center mb-5 ">
                 <i class="fa-solid fa-filter mr-4"></i>
                 <h2 class="text-2xl font-bold">Filter Product</h2>
@@ -66,27 +65,46 @@
 
         </div>
 
-
-
-        <!-- Toggle Button -->
-        {{-- <div class="p-4">
-        <button id="toggleSidebar" class="px-4 py-2 bg-slate-800 text-white rounded">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-        </button>
-    </div> --}}
-
         <!-- Products Grid -->
-        <div class="p-1 sm:flex-1 p-4">
-            <h1 class="text-4xl font-bold mb-8">Etalase Otomotif</h1>
+        <div class="mb-8 p-1 sm:flex-1 p-4">
+            <div class="flex justify-between text-center">
+                <h1 class="text-4xl font-bold">Etalase Otomotif</h1>
+                <button class="toggle-button" id="toggleButton">
+                    <i id="toggleOff" class=" fa-solid fa-toggle-off fa-2xl"></i>
+                    <i id="toggleOn" class=" hidden fa-solid fa-toggle-on fa-2xl"></i>
+                </button>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const sidebar = document.getElementById('sidebar');
+                    const button = document.getElementById('toggleOff');
+                    const button2 = document.getElementById('toggleOn');
+
+                    const toggleButton = document.getElementById('toggleButton');
+
+                    toggleButton.addEventListener('click', () => {
+                        if (sidebar.style.display === 'block') {
+                            sidebar.style.display = 'none';
+                            button.style.display = 'block';
+                            button2.style.display = 'none';
+                            // toggleButton.textContent = 'Show Sidebar';
+                        } else {
+                            sidebar.style.display = 'block';
+                            button.style.display = 'none';
+                            button2.style.display = 'block';
+                            // toggleButton.textContent = 'Hide Sidebar';
+                        }
+                    });
+                });
+            </script>
+
             <div class="grid grid-cols-2 gap-1 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 mt-8">
                 @foreach ($otomotif as $product)
                     <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                         <a href="{{ route('otomotif.spesifikasi', $product->id) }}">
                             <img src="/img/produk otomotif 1.webp" alt="{{ $product->judul_produk }}"
                                 class="w-full h-40 object-cover">
-                            <div class="p-6">
+                            <div class="p-2 md:p-4">
                                 <p class="font-bold text-lg md:text-xl">Rp. {{ number_format($product->harga, 0, ',', '.') }}</p>
                                 <h2 class="mt-4text-lg md:text-xl">{{ $product->judul_produk }}</h2>
                                 <p class="mt-1 text-gray-500">{{ $product->deskripsi_produk }}</p>

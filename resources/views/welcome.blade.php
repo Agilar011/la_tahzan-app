@@ -3,76 +3,90 @@
 @section('content')
 {{-- Section Carousel --}}
 <style>
-    .carousel {
-        display: flex;
-        width: 100%;
-        height: 60%; /* Atur tinggi carousel sesuai kebutuhan */
-    }
     .carousel-item {
-        min-width: 100%;
-        transition: transform 0.5s ease-in-out;
+        display: none;
+        /* height: 100%; */
+        border-radius: 10px;
+    }.carousel-container {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+            border-radius: 10px;
+        }
+        .carousel-item {
+            display: none;
+            width: auto;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .carousel-item.active {
+            display: block;
+        }
+    .carousel-item.active {
+        display: block;
+    }
+    .button-container {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+    }
+    .prev, .next {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
     }
 </style>
 
-<div class="relative">
-    <div class="carousel" id="carousel">
-        <div class="carousel-item flex justify-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 1" class="w-auto h-[500px] object-cover sm::object-contain">
-        </div>
-        <div class="carousel-item flex justify-center">
-            <img src="/img/thumbnail umrah.jpg" alt="Placeholder Image 2" class="w-auto h-[500px] object-cover sm::object-contain">
-        </div>
-        <div class="carousel-item flex justify-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 3" class="w-auto h-[500px] object-cover sm::object-contain">
-        </div>
-        <div class="carousel-item flex justify-center">
-            <img src="/img/thumbnail umrah.jpg" alt="Image 4" class="w-auto h-[500px] object-cover sm::object-contain">
-        </div>
-        <div class="carousel-item flex justify-center">
-            <img src="/img/thumbnail otomotif.jpg" alt="Image 5" class="w-auto h-[500px] object-cover sm::object-contain">
-        </div>
+<div class="carousel-container min-h-full">
+    <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1" class="carousel-item active">
+    <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2" class="carousel-item">
+    <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3" class="carousel-item">
+    <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4" class="carousel-item">
+    <div class="button-container">
+        <button class="prev" id="prev">&#10094;</button>
+        <button class="next" id="next">&#10095;</button>
     </div>
-
-    <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2" id="prev">&lt;</button>
-    <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2" id="next">&gt;</button>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const carousel = document.getElementById('carousel');
         const carouselItems = document.querySelectorAll('.carousel-item');
         const prevButton = document.getElementById('prev');
         const nextButton = document.getElementById('next');
         let currentIndex = 0;
 
         function updateCarousel() {
-            const offset = -currentIndex * 100;
-            carousel.style.transform = `translateX(${offset}%)`;
-            console.log(`updateCarousel called. Current Index: ${currentIndex}, Offset: ${offset}%`);
+            carouselItems.forEach((item, index) => {
+                item.classList.toggle('active', index === currentIndex);
+            });
+            console.log(`updateCarousel called. Current Index: ${currentIndex}`);
         }
 
         function showNextImage() {
             console.log("showNextImage called. Current Index:", currentIndex);
-            if (currentIndex < carouselItems.length - 1) {
-                currentIndex++;
-            } else {
-                currentIndex = 0;
-            }
+            currentIndex = (currentIndex + 1) % carouselItems.length;
             updateCarousel();
             console.log("Next Image Shown. Updated Current Index:", currentIndex);
         }
 
-        prevButton.addEventListener('click', () => {
-            console.log("Prev button clicked. Current Index:", currentIndex);
-            if (currentIndex > 0) {
-                currentIndex--;
-            } else {
-                currentIndex = carouselItems.length - 1;
-            }
+        function showPrevImage() {
+            console.log("showPrevImage called. Current Index:", currentIndex);
+            currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
             updateCarousel();
             console.log("Previous Image Shown. Updated Current Index:", currentIndex);
-        });
+        }
 
+        prevButton.addEventListener('click', showPrevImage);
         nextButton.addEventListener('click', showNextImage);
 
         setInterval(showNextImage, 5000); // Change image every 5 seconds
@@ -83,7 +97,7 @@
 
 
     {{-- Section 3 Product --}}
-    <div class="w-full sm:grid w-1/2 md:flex flex-wrap justify-center w-11/12 mx-auto mt-10">
+    <div class="w-full md:flex flex-wrap justify-center w-11/12 mx-auto mt-10">
         <div class="my-2 md:flex flex-col bg-cover bg-center mx-2 "
             style="background-image: url('/img/thumbnail umrah.jpg'); min-width: 30%;">
             <div class="bg-black bg-opacity-50 text-white text-center min-h-[210px] flex flex-col justify-between">
@@ -176,7 +190,7 @@
 
         </div>
 
-        <div class="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+        <div class="w-11/12 mx-auto grid grid-cols-2 mt-8 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-4 ">
             @foreach ($otomotif as $item)
             <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                 <img src="/img/produk otomotif 1.webp" alt="Automotive Product"
