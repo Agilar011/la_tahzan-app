@@ -6,85 +6,144 @@
             <!-- Carousel -->
             <div class="w-full lg:w-2/3">
                 <div class="w-full grid gap-y-2">
-                    <div class="rounded-xl">
+
+                    {{-- Div gambar utama --}}
+                    <div class="hidden sm:block rounded-xl">
                         <img src="/img/produk otomotif 1.webp" alt="Gambar Utama" id="mainImage"
                             class="w-full h-96 object-cover rounded-xl">
-                    </div>
-                    <div class="hidden flex-col gap-x-2 justify-center xl:flex sm:flex-row sm:flex-wrap">
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
+                        <div class="hidden flex-col gap-x-2 mt-2 justify-center xl:flex sm:flex-row sm:flex-wrap">
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
+
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 5"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
+                            <div class="w-full sm:w-[15%]">
+                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 6"
+                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                            </div>
                         </div>
 
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 5"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
-                        </div>
-                        <div class="w-full sm:w-32">
-                            <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 6"
-                                class="w-full h-40 object-cover thumbnail rounded-lg">
-                        </div>
                     </div>
+                    {{-- end div gambar --}}
+
                     {{-- section carousel mobile --}}
-                    {{-- <div class="w-1/2">
-                <div class="flex gap-x-2 justify-center">
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
-                    </div>
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
-                    </div>
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
+                    <style>
+                        .carousel-item {
+                            display: none;
+                            /* height: 100%; */
+                            border-radius: 10px;
+                        }.carousel-container {
+                                height: 60vh;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                overflow: hidden;
+                                /* background-color: #fff;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+                                border-radius: 10px;
+                            }
+                            .carousel-item {
+                                display: none;
+                                width: auto;
+                                height: 100%;
+                                border-radius: 10px;
+                                object-fit: cover;
+                            }
+                            .carousel-item.active {
+                                display: block;
+                            }
+                        .carousel-item.active {
+                            display: block;
+                        }
+                        .button-container {
+                            position: absolute;
+                            top: 50%;
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            transform: translateY(-50%);
+                        }
+                        .prev, .next {
+                            background-color: rgba(0, 0, 0, 0.5);
+                            color: white;
+                            border: none;
+                            padding: 10px;
+                            cursor: pointer;
+                        }
+                    </style>
+
+                    <div class="block sm:hidden">
+                        <div class="carousel-container min-h-full sm:hidden">
+                            <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1" class="carousel-item active">
+                            <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2" class="carousel-item">
+                            <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3" class="carousel-item">
+                            <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4" class="carousel-item">
+                            <div class="button-container">
+                                <button class="prev" id="prev">&#10094;</button>
+                                <button class="next" id="next">&#10095;</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
-                    </div>
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 5"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
-                    </div>
-                    <div class="w-full sm:w-32">
-                        <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 6"
-                            class="w-full h-40 object-cover thumbnail rounded-lg">
-                    </div>
-                </div>
-            </div> --}}
 
 
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const carouselItems = document.querySelectorAll('.carousel-item');
+                            const prevButton = document.getElementById('prev');
+                            const nextButton = document.getElementById('next');
+                            let currentIndex = 0;
 
-                </div>
+                            function updateCarousel() {
+                                carouselItems.forEach((item, index) => {
+                                    item.classList.toggle('active', index === currentIndex);
+                                });
+                                console.log(`updateCarousel called. Current Index: ${currentIndex}`);
+                            }
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const mainImage = document.getElementById('mainImage');
-                        const thumbnails = document.querySelectorAll('.thumbnail');
+                            function showNextImage() {
+                                console.log("showNextImage called. Current Index:", currentIndex);
+                                currentIndex = (currentIndex + 1) % carouselItems.length;
+                                updateCarousel();
+                                console.log("Next Image Shown. Updated Current Index:", currentIndex);
+                            }
 
-                        thumbnails.forEach(thumbnail => {
-                            thumbnail.addEventListener('click', () => {
-                                const newSrc = thumbnail.src;
-                                mainImage.src = newSrc;
-                            });
+                            function showPrevImage() {
+                                console.log("showPrevImage called. Current Index:", currentIndex);
+                                currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+                                updateCarousel();
+                                console.log("Previous Image Shown. Updated Current Index:", currentIndex);
+                            }
+
+                            prevButton.addEventListener('click', showPrevImage);
+                            nextButton.addEventListener('click', showNextImage);
+
+                            setInterval(showNextImage, 5000); // Change image every 5 seconds
+
+                            updateCarousel();
                         });
-                    });
-                </script>
+                    </script>
+
+
+
+
+                </div>
             </div>
 
             <!-- Product Details Mobile-->

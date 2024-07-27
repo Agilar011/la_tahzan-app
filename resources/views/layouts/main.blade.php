@@ -32,12 +32,12 @@
 
 <body class="font-sans antialiased">
     @vite('resources/css/app.css')
-    <nav class="bg-slate-800 p-4 sticky top-0 z-50 gap-x-84">
+    <nav class="bg-slate-800 px-4 sticky top-0 z-50 gap-x-84">
         <div class="flex justify-between items-center">
             <!-- Logo Section -->
-            <div class="flex justify-between mb-2">
+            <div class="flex justify-between">
                 <div>
-                    <img src="/img/la tahzan.png" alt="Logo" class="h-[40px] object-contain" >
+                    <img src="/img/la tahzan.png" alt="Logo" class="h-[5vw] object-contain" >
                 </div>
 
                 <!-- Hamburger Menu (Mobile) -->
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Navigation Links (Desktop) -->
-            <div class="hidden md:block px-2 py-2">
+            <div class="hidden md:block px-2 mx-4">
                 <ul class="flex space-x-10">
                     <li><a href="/about" class="text-white">Umrah</a></li>
                     <li><a href="/services" class="text-white">Property</a></li>
