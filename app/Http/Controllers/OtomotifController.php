@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Otomotif;
 use App\Models\SpesifikasiOtomotif;
@@ -11,10 +12,97 @@ use Illuminate\Support\Facades\Storage;
 
 class OtomotifController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $otomotif = Otomotif::with('spesifikasi', 'fotos')->get();
-        return view('admin.otomotif', compact('otomotif'));
+        $query = Otomotif::query();
+        // dd($request->all());
+
+        if ($request->filled('min_price') || $request->filled('max_price')) {
+            $minPrice = $request->input('min_price', 0);
+            $maxPrice = $request->input('max_price', PHP_INT_MAX);
+            $query->whereBetween('harga', [$minPrice, $maxPrice]);
+        }
+
+        if ($request->filled('merks')) {
+            $query->whereIn('merk_id', $request->input('merks'));
+        }
+
+        if ($request->filled('jenis')) {
+            $query->whereIn('jenis_id', $request->input('jenis'));
+        }
+
+        if ($request->filled('subjenis')) {
+            $query->whereIn('subjenis_id', $request->input('subjenis'));
+        }
+
+
+
+        if (is_null($request->min_price) && is_null($request->max_price)) {
+            // Periksa autentikasi pengguna
+            if (Auth::check()) {
+                // Periksa peran pengguna
+                if (Auth::user()->role == 'admin') {
+                    // Ambil data otomotif dengan relasi spesifikasi dan foto untuk admin
+                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->get();
+                    return view('admin.otomotif', compact('otomotif'));
+                } else {
+                    // Ambil data otomotif dengan relasi spesifikasi dan foto untuk pelanggan
+                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->get();
+                    $transmisi = SpesifikasiOtomotif::select('transmisi')->distinct()->get();
+
+                    return view('customer.otomotif', compact('otomotif'));
+                }
+            } else {
+                // Jika pengguna tidak terautentikasi, arahkan ke halaman login atau halaman lain sesuai kebutuhan
+                // Ambil data otomotif dengan relasi spesifikasi dan foto untuk pelanggan
+                $otomotif = Otomotif::with('spesifikasi', 'fotos')->get();
+                $transmisi = SpesifikasiOtomotif::select('transmisi')->distinct()->get();
+                // dd($transmisi);
+                $type = SpesifikasiOtomotif::select('type')->distinct()->get();
+                // dd($type);
+                $subtype = SpesifikasiOtomotif::select('subtype')->distinct()->get();
+                // dd($subtype);
+                $brand = SpesifikasiOtomotif::select('brand')->distinct()->get();
+                // dd($brand);
+                return view('customer.otomotif', compact('otomotif', 'transmisi', 'type', 'subtype', 'brand'));
+            }
+        } else {
+            # code...
+            // $otomotif = Otomotif::where('category', 'automotive')
+            // ->whereBetween('price', [$minPrice, $maxPrice])
+            // ->get();
+
+            $minPrice = $request->input('min_price');
+            $maxPrice = $request->input('max_price'); // Default max price
+            if ($maxPrice == null) {
+                $maxPrice = Otomotif::max('harga');
+                $maxPrice = $maxPrice + 1;
+            } elseif ($minPrice == null) {
+                $minPrice = Otomotif::min('harga');
+                $minPrice = $minPrice - 1;
+            }
+
+            // $minPrice = $minPrice + 1;
+
+            // $maxPrice = $maxPrice + 1;
+
+            // dd($minPrice, $maxPrice);
+
+
+            $otomotif = Otomotif::with('spesifikasi', 'fotos')
+                ->whereBetween('otomotif.harga', [$minPrice, $maxPrice])
+                ->get();
+
+            // dd($otomotif);
+
+            return view('customer.otomotif', compact('otomotif'));
+
+        }
+
+        // dd($request->all());
+
+        // $otomotif = Otomotif::with('spesifikasi', 'fotos')->get();
+        // return view('admin.otomotif', compact('otomotif'));
     }
 
     public function create()
@@ -180,6 +268,20 @@ class OtomotifController extends Controller
         $otomotif->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function spesifikasi($id)
+    {
+        $otomotif = Otomotif::join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+        ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
+        ->with('spesifikasi', 'fotos')->findOrFail($id);
+
+        $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
+        $otomotif->sellerBergabung = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)
+                ->min('created_at');
+                $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
+
+        return view('customer.spesifikasi-otomotif', compact('otomotif'));
     }
 
 
