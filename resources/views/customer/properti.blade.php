@@ -1,332 +1,132 @@
-@extends('admin.layouts.master')
+@extends('layouts.main')
 
 @section('content')
-    <style>
-        /* Masukkan CSS khusus untuk halaman ini di sini */
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    <div class="grid mx-auto mt-10 md:flex">
 
-        .action-buttons button {
-            margin-bottom: 5px;
-            width: 100px;
-        }
-
-        .action-buttons button:last-child {
-            margin-bottom: 0;
-        }
-
-        .loading-spinner {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .action-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .action-buttons button {
-                margin: 5px;
-                width: auto;
-            }
-
-            table thead {
-                display: none;
-            }
-
-            table tbody,
-            table tr,
-            table td {
-                display: block;
-                width: 100%;
-            }
-
-            table tr {
-                margin-bottom: 15px;
-            }
-
-            table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                width: 50%;
-                padding-left: 15px;
-                font-weight: bold;
-                text-align: left;
-            }
-        }
-    </style>
-
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">Properti</h1>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('admin.properti.create') }}" class="btn btn-success">+ Tambah Properti</a>
-            </div>
-            @if (session('success'))
-                <div class="alert alert-success" id="success-alert">
-                    {{ session('success') }}
+        <!-- Sidebar -->
+        <div id="sidebar" class="min-w-1/2 p-4 hidden ">
+            <span class="flex text-center items-center mb-5 ">
+                <i class="fa-solid fa-filter mr-4"></i>
+                <h2 class="text-2xl font-bold">Filter Product</h2>
+            </span>
+            <h2 class="text-xl font-bold mb-4">Filter by Price</h2>
+            <form method="GET" action="{{ route('customer.otomotif.index') }}">
+                <div class="mb-4">
+                    <label for="min_price" class="block text-gray-700">Min Price</label>
+                    <input type="number" id="min_price" name="min_price" value="{{ request('min_price') }}"
+                        class="w-full px-4 py-2 border rounded">
                 </div>
-            @endif
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Informasi Penjual</th>
-                        <th>Judul Properti</th>
-                        <th>Spesifikasi Properti</th>
-                        <th>Harga</th>
-                        <th>Tanggal Diubah</th>
-                        <th>Status Payment</th>
-                        <th>Status Ads</th>
-                        <th>Countdown</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($properti as $item)
-                        <tr id="properti-{{ $item->id }}">
-                            <td data-label="Penjual">
-                                <ul>
-                                    <li>ID : {{ $item->spesifikasi->user_id }}</li>
-                                    <li>Nama: {{ $item->spesifikasi->seller }}</li>
-                                    <li>Telfon: {{ $item->spesifikasi->phone }}</li>
-                                    <li>Alamat: {{ $item->spesifikasi->address }}</li>
-                                </ul>
-                            </td>
-                            <td data-label="Judul Properti">{{ $item->judul_produk }}</td>
-                            <td data-label="Deskripsi Properti">
-                                <ul>
-                                    <li>Jenis Properti : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->jenis_properti }}</span></li>
-                                    <li>Luas Tanah : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->luas_tanah }}</span></li>
-                                    <li>Luas Bangunan : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->luas_bangunan }}</span></li>
-                                    <li>Jumlah Kamar Tidur : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->jumlah_kamar_tidur }}</span></li>
-                                    <li>Jumlah Kamar Mandi : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->jumlah_kamar_mandi }}</span></li>
-                                    <li>Fasilitas : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->fasilitas }}</span></li>
-                                    <li>Sertifikat : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->sertifikat }}</span></li>
-                                </ul>
-                            </td>
-                            <td data-label="Harga">Rp. {{ number_format($item->harga, 0, ',', '.') }},-</td>
-                            <td data-label="Tanggal Diubah">{{ $item->updated_at }}</td>
-                            <td data-label="Status Payment" id="payment-status-{{ $item->id }}">
-                                {{ $item->status_payment }}</td>
-                            <td data-label="Status Ads" id="ads-status-{{ $item->id }}">
-                                {{ $item->status_ads }}</td>
-                            <td data-label="Countdown" id="countdown-{{ $item->id }}">Unavailable</td>
-                            <td class="action-buttons">
-                                <button type="button" class="btn btn-primary btn-xs"
-                                    onclick="window.location.href='{{ route('admin.properti.edit', $item->id) }}'">Ubah</button>
-                                <button type="button" class="btn btn-danger btn-xs"
-                                    onclick="confirmDelete({{ $item->id }})">Hapus</button>
-                                @if ($item->status_payment == 'unpaid' || $item->status_payment == 'expired')
-                                    <button type="button" class="btn btn-success btn-xs"
-                                        onclick="handleEtalaseClick({{ $item->id }})"
-                                        id="action-button-{{ $item->id }}">+ Etalase</button>
-                                @elseif ($item->status_payment == 'paid' && $item->status_ads == 'show')
-                                    <button type="button" class="btn btn-warning btn-xs"
-                                        onclick="handleExpiredClick({{ $item->id }})"
-                                        id="action-button-{{ $item->id }}">Expired?</button>
-                                @endif
-                                <div class="loading-spinner" id="spinner-{{ $item->id }}"></div>
-                            </td>
-                        </tr>
+                <div class="mb-4">
+                    <label for="max_price" class="block text-gray-700">Max Price</label>
+                    <input type="number" id="max_price" name="max_price" value="{{ request('max_price') }}"
+                        class="w-full px-4 py-2 border rounded">
+                </div>
+
+                <!-- Filter by brand -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Brand</h3>
+                    @foreach ($brand as $brand)
+                        <div>
+                            <input type="checkbox" id="brand_{{ $brand->id }}" name="brands[]" value="{{ $brand->id }}"
+                                {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
+                            <label for="brand_{{ $brand->id }}">{{ $brand->brand }}</label>
+                        </div>
                     @endforeach
-                </tbody>
-            </table>
+                </div>
+
+                <!-- Filter by Jenis -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Jenis</h3>
+                    @foreach ($type as $j)
+                        <div>
+                            <input type="checkbox" id="type_{{ $j->id }}" name="type[]" value="{{ $j->id }}"
+                                {{ in_array($j->id, request('type', [])) ? 'checked' : '' }}>
+                            <label for="type_{{ $j->id }}">{{ $j->type }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Filter by Subjenis -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Subjenis</h3>
+                    @foreach ($subtype as $sj)
+                        <div>
+                            <input type="checkbox" id="subtype_{{ $sj->id }}" name="subtype[]"
+                                value="{{ $sj->id }}"
+                                {{ in_array($sj->id, request('subtype', [])) ? 'checked' : '' }}>
+                            <label for="subtype_{{ $sj->id }}">{{ $sj->subtype }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-slate-800 text-white rounded">Apply</button>
+            </form>
+
+
+        </div>
+
+        <!-- Products Grid -->
+        <div class="mb-8 p-1 sm:flex-1 p-4">
+            <div class="flex justify-between text-center">
+                <h1 class="text-4xl font-bold">Etalase Otomotif</h1>
+                <button class="toggle-button" id="toggleButton">
+                    <i id="toggleOff" class=" fa-solid fa-toggle-off fa-2xl"></i>
+                    <i id="toggleOn" class=" hidden fa-solid fa-toggle-on fa-2xl"></i>
+                </button>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const sidebar = document.getElementById('sidebar');
+                    const button = document.getElementById('toggleOff');
+                    const button2 = document.getElementById('toggleOn');
+
+                    const toggleButton = document.getElementById('toggleButton');
+
+                    toggleButton.addEventListener('click', () => {
+                        if (sidebar.style.display === 'block') {
+                            sidebar.style.display = 'none';
+                            button.style.display = 'block';
+                            button2.style.display = 'none';
+                            // toggleButton.textContent = 'Show Sidebar';
+                        } else {
+                            sidebar.style.display = 'block';
+                            button.style.display = 'none';
+                            button2.style.display = 'block';
+                            // toggleButton.textContent = 'Hide Sidebar';
+                        }
+                    });
+                });
+            </script>
+
+            <div class="grid grid-cols-2 gap-1 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 mt-8">
+                @foreach ($otomotif as $product)
+                    <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+                        <a href="{{ route('otomotif.spesifikasi', $product->id) }}">
+                            <img src="/img/produk otomotif 1.webp" alt="{{ $product->judul_produk }}"
+                                class="w-full h-40 object-cover">
+                            <div class="p-2 md:p-4">
+                                <p class="font-bold text-lg md:text-xl">Rp. {{ number_format($product->harga, 0, ',', '.') }}</p>
+                                <h2 class="mt-4text-lg md:text-xl">{{ $product->judul_produk }}</h2>
+                                <p class="mt-1 text-gray-500">{{ $product->deskripsi_produk }}</p>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            {{-- <div class="mt-8">
+            {{ $otomotif->appends(request()->input())->links() }}
+        </div> --}}
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let successAlert = document.getElementById('success-alert');
-            if (successAlert) {
-                setTimeout(function() {
-                    successAlert.style.display = 'none';
-                }, 5000);
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('hidden');
             }
-
-            // Load countdown status from localStorage
-            document.querySelectorAll('[id^="countdown-"]').forEach(element => {
-                const id = element.id.replace('countdown-', '');
-                const countdownEnd = localStorage.getItem(`countdown-${id}`);
-                if (countdownEnd) {
-                    const timeLeft = Math.floor((countdownEnd - new Date().getTime()) / 1000);
-                    if (timeLeft > 0) {
-                        startCountdown(id, timeLeft);
-                    } else {
-                        localStorage.removeItem(`countdown-${id}`);
-                        updateStatus(id, 'expired', 'pending');
-                    }
-                } else {
-                    element.textContent = 'Unavailable';
-                }
-            });
         });
-
-        function confirmDelete(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus properti ini?')) {
-                fetch(`/admin/properti/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                })
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector(`#properti-${id}`).remove();
-                    } else {
-                        alert('Terjadi kesalahan. Silakan coba lagi.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                });
-            }
-        }
-
-        function changeStatus(id, paymentStatus, adsStatus) {
-            return fetch(`/admin/properti/${id}/change-status`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        status_payment: paymentStatus,
-                        status_ads: adsStatus
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                })
-                .then(data => {
-                    if (!data.success) {
-                        alert('Terjadi kesalahan. Silakan coba lagi.');
-                    }
-                    return data.success;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                    return false;
-                });
-        }
-
-        function startCountdown(id, initialTimeLeft = 15) { // 1 hour in seconds
-            let countdownElement = document.getElementById(`countdown-${id}`);
-            let timeLeft = initialTimeLeft;
-            const countdownEnd = new Date().getTime() + timeLeft * 1000;
-            localStorage.setItem(`countdown-${id}`, countdownEnd);
-
-            function formatTime(seconds) {
-                const hours = Math.floor(seconds / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                const secs = seconds % 60;
-                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            countdownElement.textContent = formatTime(timeLeft);
-
-            let countdownTimer = setInterval(() => {
-                timeLeft--;
-                countdownElement.textContent = formatTime(timeLeft);
-
-                if (timeLeft <= 0) {
-                    clearInterval(countdownTimer);
-                    countdownElement.textContent = 'Unavailable';
-                    localStorage.removeItem(`countdown-${id}`);
-                    changeStatus(id, 'expired', 'pending').then(success => {
-                        if (success) {
-                            updateStatus(id, 'expired', 'pending');
-                        }
-                    });
-                }
-            }, 1000);
-
-            countdownElement.dataset.timerId = countdownTimer;
-        }
-
-        function handleEtalaseClick(id) {
-            changeStatus(id, 'paid', 'show').then(success => {
-                if (success) {
-                    updateStatus(id, 'paid', 'show');
-                    startCountdown(id);
-                }
-            });
-        }
-
-        function handleExpiredClick(id) {
-            const countdownElement = document.getElementById(`countdown-${id}`);
-            const timerId = countdownElement.dataset.timerId;
-            if (timerId) {
-                clearInterval(timerId);
-            }
-            localStorage.removeItem(`countdown-${id}`);
-            changeStatus(id, 'expired', 'pending').then(success => {
-                if (success) {
-                    updateStatus(id, 'expired', 'pending');
-                    countdownElement.textContent = 'Unavailable';
-                }
-            });
-        }
-
-        function updateStatus(id, paymentStatus, adsStatus) {
-            document.getElementById(`payment-status-${id}`).textContent = paymentStatus;
-            document.getElementById(`ads-status-${id}`).textContent = adsStatus;
-            const actionButton = document.getElementById(`action-button-${id}`);
-            if (paymentStatus === 'paid' && adsStatus === 'show') {
-                actionButton.textContent = 'Expired?';
-                actionButton.className = 'btn btn-warning btn-xs';
-                actionButton.onclick = function() {
-                    handleExpiredClick(id);
-                };
-            } else if (paymentStatus === 'expired' || paymentStatus === 'unpaid') {
-                actionButton.textContent = '+Etalase';
-                actionButton.className = 'btn btn-success btn-xs';
-                actionButton.onclick = function() {
-                    handleEtalaseClick(id);
-                };
-            }
-        }
     </script>
 @endsection

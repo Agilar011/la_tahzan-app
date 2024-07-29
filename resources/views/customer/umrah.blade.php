@@ -1,251 +1,131 @@
-@extends('admin.layouts.master')
+@extends('layouts.main')
 
 @section('content')
-    <style>
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    <div class="grid mx-auto mt-10 md:flex">
 
-        .action-buttons button {
-            margin-bottom: 5px;
-            width: 100px;
-        }
-
-        .action-buttons button:last-child {
-            margin-bottom: 0;
-        }
-
-        .loading-spinner {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .action-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .action-buttons button {
-                margin: 5px;
-                width: auto;
-            }
-
-            table thead {
-                display: none;
-            }
-
-            table tbody,
-            table tr,
-            table td {
-                display: block;
-                width: 100%;
-            }
-
-            table tr {
-                margin-bottom: 15px;
-            }
-
-            table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                width: 50%;
-                padding-left: 15px;
-                font-weight: bold;
-                text-align: left;
-            }
-        }
-    </style>
-
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">Etalase Umrah</h1>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-success" onclick="redirectToInputUmrah()">+ Produk Umrah</button>
-            </div>
-            @if (session('success'))
-                <div class="alert alert-success" id="success-alert">
-                    {{ session('success') }}
+        <!-- Sidebar -->
+        <div id="sidebar" class="min-w-1/2 p-4 hidden ">
+            <span class="flex text-center items-center mb-5 ">
+                <i class="fa-solid fa-filter mr-4"></i>
+                <h2 class="text-2xl font-bold">Filter Product</h2>
+            </span>
+            <h2 class="text-xl font-bold mb-4">Filter by Price</h2>
+            <form method="GET" action="{{ route('customer.otomotif.index') }}">
+                <div class="mb-4">
+                    <label for="min_price" class="block text-gray-700">Min Price</label>
+                    <input type="number" id="min_price" name="min_price" value="{{ request('min_price') }}"
+                        class="w-full px-4 py-2 border rounded">
                 </div>
-            @endif
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Informasi Agen</th>
-                        <th>Judul Produk</th>
-                        <th>Deskripsi Produk</th>
-                        <th>Spesifikasi Produk</th>
-                        <th>Harga</th>
-                        <th style="display: none">Status</th>
-                        <th>Tgl. Dibuat</th>
-                        <th>Tgl. Diubah</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($umrahs as $umrah)
-                        <tr id="umrah-{{ $umrah->id }}">
-                            <td>
-                                <ul>
-                                    <li data-label="Agen Travel">Nama Agen: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->agen_travel }}</span></li>
-                                    <li data-label="Nomor Telefon Agen">Nomor Telfon: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->nomor_telefon_agen }}</span>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td data-label="Judul Produk">{{ $umrah->judul_produk }}</td>
-                            <td data-label="Deskripsi Produk" style="max-width: 200px;">{{ $umrah->deskripsi_produk }}</td>
-                            <td>
-                                <ul>
-                                    <li data-label="Maskapai">Maskapai: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->maskapai }}</span></li>
-                                    <li data-label="Hotel">Hotel: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->hotel }}</span></li>
-                                    <li data-label="Tanggal Keberangkatan">Tanggal Keberangkatan: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->tanggal_keberangkatan }}</span>
-                                    </li>
-                                    <li data-label="Durasi">Durasi: <span
-                                            style="color:rgb(2, 0, 128)">{{ $umrah->spesifikasi->durasi }} hari</span></li>
-                                </ul>
-                            </td>
-                            <td data-label="Harga">Rp. {{ number_format($umrah->harga, 0, ',', '.') }}</td>
-                            <td class="status" style="display:none;">{{ $umrah->status_ads }}</td>
-                            <td>{{ $umrah->created_at }}</td>
-                            <td>{{ $umrah->updated_at }}</td>
-                            <td class="action-buttons">
-                                <button type="button"
-                                    class="btn btn-{{ $umrah->status_ads === 'pending' ? 'success' : 'warning' }} btn-xs"
-                                    id="status-button-{{ $umrah->id }}"
-                                    onclick="toggleStatus({{ $umrah->id }}, '{{ $umrah->status_ads }}')">
-                                    {{ $umrah->status_ads === 'pending' ? '+ Etalase' : 'Sembunyikan' }}
-                                </button>
-                                <div class="loading-spinner" id="loading-{{ $umrah->id }}"></div>
-                                 <button type="button" class="btn btn-primary btn-xs"
-                                    onclick="window.location.href='{{ route('admin.umrah.edit', $umrah->id) }}'">Update</button>
-                                <button type="button" class="btn btn-danger btn-xs"
-                                    onclick="confirmDelete({{ $umrah->id }})">Hapus</button>
-                            </td>
-                        </tr>
+                <div class="mb-4">
+                    <label for="max_price" class="block text-gray-700">Max Price</label>
+                    <input type="number" id="max_price" name="max_price" value="{{ request('max_price') }}"
+                        class="w-full px-4 py-2 border rounded">
+                </div>
+
+                <!-- Filter by brand -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Brand</h3>
+                    @foreach ($brand as $brand)
+                        <div>
+                            <input type="checkbox" id="brand_{{ $brand->id }}" name="brands[]" value="{{ $brand->id }}"
+                                {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
+                            <label for="brand_{{ $brand->id }}">{{ $brand->brand }}</label>
+                        </div>
                     @endforeach
-                </tbody>
-            </table>
+                </div>
+
+                <!-- Filter by Jenis -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Jenis</h3>
+                    @foreach ($type as $j)
+                        <div>
+                            <input type="checkbox" id="type_{{ $j->id }}" name="type[]" value="{{ $j->id }}"
+                                {{ in_array($j->id, request('type', [])) ? 'checked' : '' }}>
+                            <label for="type_{{ $j->id }}">{{ $j->type }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Filter by Subjenis -->
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold">Filter by Subjenis</h3>
+                    @foreach ($subtype as $sj)
+                        <div>
+                            <input type="checkbox" id="subtype_{{ $sj->id }}" name="subtype[]"
+                                value="{{ $sj->id }}"
+                                {{ in_array($sj->id, request('subtype', [])) ? 'checked' : '' }}>
+                            <label for="subtype_{{ $sj->id }}">{{ $sj->subtype }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-slate-800 text-white rounded">Apply</button>
+            </form>
+
+
+        </div>
+
+        <!-- Products Grid -->
+        <div class="mb-8 p-1 sm:flex-1 p-4">
+            <div class="flex justify-between text-center">
+                <h1 class="text-4xl font-bold">Etalase Otomotif</h1>
+                <button class="toggle-button" id="toggleButton">
+                    <i id="toggleOff" class=" fa-solid fa-toggle-off fa-2xl"></i>
+                    <i id="toggleOn" class=" hidden fa-solid fa-toggle-on fa-2xl"></i>
+                </button>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const sidebar = document.getElementById('sidebar');
+                    const button = document.getElementById('toggleOff');
+                    const button2 = document.getElementById('toggleOn');
+
+                    const toggleButton = document.getElementById('toggleButton');
+
+                    toggleButton.addEventListener('click', () => {
+                        if (sidebar.style.display === 'block') {
+                            sidebar.style.display = 'none';
+                            button.style.display = 'block';
+                            button2.style.display = 'none';
+                            // toggleButton.textContent = 'Show Sidebar';
+                        } else {
+                            sidebar.style.display = 'block';
+                            button.style.display = 'none';
+                            button2.style.display = 'block';
+                            // toggleButton.textContent = 'Hide Sidebar';
+                        }
+                    });
+                });
+            </script>
+
+            <div class="grid grid-cols-2 gap-1 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 mt-8">
+                @foreach ($otomotif as $product)
+                    <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
+                        <a href="{{ route('otomotif.spesifikasi', $product->id) }}">
+                            <img src="/img/produk otomotif 1.webp" alt="{{ $product->judul_produk }}"
+                                class="w-full h-40 object-cover">
+                            <div class="p-2 md:p-4">
+                                <p class="font-bold text-lg md:text-xl">Rp. {{ number_format($product->harga, 0, ',', '.') }}</p>
+                                <h2 class="mt-4text-lg md:text-xl">{{ $product->judul_produk }}</h2>
+                                <p class="mt-1 text-gray-500">{{ $product->deskripsi_produk }}</p>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            {{-- <div class="mt-8">
+            {{ $otomotif->appends(request()->input())->links() }}
+        </div> --}}
         </div>
     </div>
 
     <script>
-        function redirectToInputUmrah() {
-            window.location.href = "{{ route('admin.input.input-umrah') }}";
-        }
-
-
-
-        function toggleStatus(id, currentStatus) {
-            let message = currentStatus === 'pending' ? 'Apakah anda akan memasukkan produk ini ke dalam etalase?' :
-                'Apakah anda akan menyembunyikan produk ini dari etalase?';
-            if (confirm(message)) {
-                let newStatus = currentStatus === 'pending' ? 'show' : 'pending';
-                let statusButton = document.getElementById(`status-button-${id}`);
-                let loadingSpinner = document.getElementById(`loading-${id}`);
-
-                loadingSpinner.style.display = 'inline-block';
-                statusButton.disabled = true;
-
-                fetch(`/admin/umrah/${id}/toggle-status`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            status: newStatus
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            let row = document.querySelector(`#umrah-${id}`);
-                            row.querySelector('.status').textContent = newStatus;
-
-                            statusButton.textContent = newStatus === 'show' ? 'Sembunyikan' : '+ Etalase';
-                            statusButton.className = newStatus === 'show' ? 'btn btn-warning btn-xs' :
-                                'btn btn-success btn-xs';
-                            statusButton.setAttribute('onclick', `toggleStatus(${id}, '${newStatus}')`);
-                        } else {
-                            alert('Terjadi kesalahan. Silakan coba lagi.');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error))
-                    .finally(() => {
-                        loadingSpinner.style.display = 'none';
-                        statusButton.disabled = false;
-                    });
-            }
-        }
-
-        function confirmDelete(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-                fetch(`/admin/umrah/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                })
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector(`#umrah-${id}`).remove();
-                    } else {
-                        alert('Terjadi kesalahan. Silakan coba lagi.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let successAlert = document.getElementById('success-alert');
-            if (successAlert) {
-                setTimeout(function() {
-                    successAlert.style.display = 'none';
-                }, 5000);
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('hidden');
             }
         });
     </script>
