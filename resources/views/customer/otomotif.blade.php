@@ -27,7 +27,8 @@
                     <h3 class="text-lg font-bold">Filter by Brand</h3>
                     @foreach ($brand as $brand)
                         <div>
-                            <input type="checkbox" id="brand_{{ $brand->id }}" name="brands[]" value="{{ $brand->id }}"
+                            <input type="checkbox" id="brand_{{ $brand->id }}" name="brands[]"
+                                value="{{ $brand->id }}"
                                 {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
                             <label for="brand_{{ $brand->id }}">{{ $brand->brand }}</label>
                         </div>
@@ -99,34 +100,38 @@
             </script>
 
             <div class="grid grid-cols-2 gap-1 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4 mt-8">
-                @foreach ($otomotif as $product)
+                @foreach ($otomotif as $otomotif)
                     <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
-                        <a href="{{ route('otomotif.spesifikasi', $product->id) }}">
-                            <img src="/img/produk otomotif 1.webp" alt="{{ $product->judul_produk }}"
+                        <a href="{{ route('otomotif.spesifikasi', $otomotif->id) }}">
+                            @foreach ($otomotif->fotos as $foto)
+                            <img src="{{ asset('storage/foto_otomotif/' . $foto->path) }}" alt="{{ $otomotif->judul_produk }}"
                                 class="w-full h-40 object-cover">
-                            <div class="p-2 md:p-4">
-                                <p class="font-bold text-lg md:text-xl">Rp. {{ number_format($product->harga, 0, ',', '.') }}</p>
-                                <h2 class="mt-4text-lg md:text-xl">{{ $product->judul_produk }}</h2>
-                                <p class="mt-1 text-gray-500">{{ $product->deskripsi_produk }}</p>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-            {{-- <div class="mt-8">
+                            @break <!-- Show only the first photo -->
+                        @endforeach
+                        <div class="p-2 md:p-4">
+                            <p class="font-bold text-lg md:text-xl">Rp.
+                                {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
+                            <h2 class="mt-4text-lg md:text-xl">{{ $otomotif->judul_produk }}</h2>
+                            <p class="mt-1 text-gray-500">{{ $otomotif->deskripsi_produk }}</p>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+        {{-- <div class="mt-8">
             {{ $otomotif->appends(request()->input())->links() }}
         </div> --}}
-        </div>
     </div>
+</div>
 
-    <script>
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            var sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('hidden')) {
-                sidebar.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('hidden');
-            }
-        });
-    </script>
+<script>
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        if (sidebar.classList.contains('hidden')) {
+            sidebar.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('hidden');
+        }
+    });
+</script>
 @endsection

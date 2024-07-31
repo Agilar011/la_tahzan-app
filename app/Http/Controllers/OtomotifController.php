@@ -155,10 +155,12 @@ class OtomotifController extends Controller
 
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
-                $path = $file->store('public/foto_otomotif');
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_otomotif', $filename); // Menyimpan file dengan nama yang dihasilkan
+
                 $foto = new FotoOtomotif();
                 $foto->otomotif_id = $otomotif->id;
-                $foto->path = $path;
+                $foto->path = $filename; // Menyimpan nama file saja di database
                 $foto->save();
             }
         }
@@ -213,20 +215,21 @@ class OtomotifController extends Controller
         if ($request->hasFile('foto')) {
             $foto_existing = $request->input('foto_existing', []);
             foreach ($request->file('foto') as $key => $file) {
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_otomotif', $filename); // Menyimpan file dengan nama yang dihasilkan
+
                 if (isset($foto_existing[$key])) {
                     // Replace existing photo
                     $foto = FotoOtomotif::where('path', $foto_existing[$key])->first();
                     if ($foto) {
-                        Storage::delete($foto->path);
-                        $path = $file->store('public/foto_otomotif');
-                        $foto->update(['path' => $path]);
+                        Storage::delete('public/foto_otomotif/' . $foto->path); // Menghapus file lama
+                        $foto->update(['path' => $filename]); // Memperbarui dengan nama file baru
                     }
                 } else {
                     // Add new photo
-                    $path = $file->store('public/foto_otomotif');
                     FotoOtomotif::create([
                         'otomotif_id' => $otomotif->id,
-                        'path' => $path
+                        'path' => $filename // Menyimpan nama file saja di database
                     ]);
                 }
             }

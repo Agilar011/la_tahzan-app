@@ -11,11 +11,63 @@ use Illuminate\Support\Facades\Storage;
 
 class PropertiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $properti = Properti::with('spesifikasi', 'fotos')->get();
-        return view('admin.properti', compact('properti'));
+        $query = Properti::query();
+
+        if ($request->filled('min_price') || $request->filled('max_price')) {
+            $minPrice = $request->input('min_price', 0);
+            $maxPrice = $request->input('max_price', PHP_INT_MAX);
+            $query->whereBetween('harga', [$minPrice, $maxPrice]);
+        }
+
+        if ($request->filled('jenis_properti')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('jenis_properti', $request->input('jenis_properti'));
+            });
+        }
+
+        if ($request->filled('kota')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('kota', $request->input('kota'));
+            });
+        }
+
+        if ($request->filled('provinsi')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('provinsi', $request->input('provinsi'));
+            });
+        }
+
+        // Check if no filters are applied
+        if (!$request->filled('min_price') && !$request->filled('max_price')) {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // Get property data with related specifications and photos for admin
+                    $properti = Properti::with('spesifikasi', 'fotos')->get();
+                    return view('admin.properti', compact('properti'));
+                } else {
+                    // Get property data with related specifications and photos for customers
+                    $properti = Properti::with('spesifikasi', 'fotos')->get();
+                    return view('customer.properti', compact('properti'));
+                }
+            } else {
+                // For unauthenticated users, get property data with related specifications and photos
+                $properti = Properti::with('spesifikasi', 'fotos')->get();
+                $jenis_properti = SpesifikasiProperti::select('jenis_properti')->distinct()->get();
+                $kota = SpesifikasiProperti::select('kota')->distinct()->get();
+                $provinsi = SpesifikasiProperti::select('provinsi')->distinct()->get();
+                return view('customer.properti', compact('properti', 'jenis_properti', 'kota', 'provinsi'));
+            }
+        } else {
+            // Get properties within the price range and with other filters
+            $properties = $query->with('spesifikasi', 'fotos')->get();
+            return view('customer.properti', compact('properti'));
+        }
     }
+
 
     public function create()
     {
@@ -69,10 +121,12 @@ class PropertiController extends Controller
 
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
-                $path = $file->store('public/foto_properti');
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_properti', $filename); // Menyimpan file dengan nama yang dihasilkan
+
                 $foto = new FotoProperti();
                 $foto->properti_id = $properti->id;
-                $foto->path = $path;
+                $foto->path = $filename; // Menyimpan nama file saja di database
                 $foto->save();
             }
         }
@@ -127,24 +181,26 @@ class PropertiController extends Controller
         if ($request->hasFile('foto')) {
             $foto_existing = $request->input('foto_existing', []);
             foreach ($request->file('foto') as $key => $file) {
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_properti', $filename); // Menyimpan file dengan nama yang dihasilkan
+
                 if (isset($foto_existing[$key])) {
                     // Replace existing photo
                     $foto = FotoProperti::where('path', $foto_existing[$key])->first();
                     if ($foto) {
-                        Storage::delete($foto->path);
-                        $path = $file->store('public/foto_properti');
-                        $foto->update(['path' => $path]);
+                        Storage::delete('public/foto_properti/' . $foto->path); // Menghapus file lama
+                        $foto->update(['path' => $filename]); // Memperbarui dengan nama file baru
                     }
                 } else {
                     // Add new photo
-                    $path = $file->store('public/foto_properti');
                     FotoProperti::create([
                         'properti_id' => $properti->id,
-                        'path' => $path
+                        'path' => $filename // Menyimpan nama file saja di database
                     ]);
                 }
             }
         }
+
         return redirect()->route('admin.properti.index')->with('success', 'Properti updated successfully.');
     }
 

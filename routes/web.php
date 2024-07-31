@@ -12,6 +12,20 @@ Route::get('/', [DashboardController::class, 'index'])->name('welcome');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::prefix('umrah')->name('properti.')->group(function () {
+    Route::get('/', [PropertiController::class, 'index'])->name('index');
+    Route::get('/create', [PropertiController::class, 'create'])->name('create');
+    Route::post('/', [PropertiController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PropertiController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
+    Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
+    Route::get('/{id}/spesifikasi', [PropertiController::class, 'spesifikasi'])->name('spesifikasi');
+
+});
+
+
 Route::prefix('otomotif')->name('otomotif.')->group(function () {
     Route::get('/', [OtomotifController::class, 'index'])->name('index');
     Route::get('/create', [OtomotifController::class, 'create'])->name('create');
@@ -21,6 +35,18 @@ Route::prefix('otomotif')->name('otomotif.')->group(function () {
     Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
     Route::get('/{id}/spesifikasi', [OtomotifController::class, 'spesifikasi'])->name('spesifikasi');
+
+});
+
+Route::prefix('properti')->name('properti.')->group(function () {
+    Route::get('/', [PropertiController::class, 'index'])->name('index');
+    Route::get('/create', [PropertiController::class, 'create'])->name('create');
+    Route::post('/', [PropertiController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PropertiController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
+    Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
+    Route::get('/{id}/spesifikasi', [PropertiController::class, 'spesifikasi'])->name('spesifikasi');
 
 });
 
