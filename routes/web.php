@@ -13,15 +13,15 @@ Route::get('/', [DashboardController::class, 'index'])->name('welcome');
 //     return view('welcome');
 // });
 
-Route::prefix('umrah')->name('properti.')->group(function () {
-    Route::get('/', [PropertiController::class, 'index'])->name('index');
-    Route::get('/create', [PropertiController::class, 'create'])->name('create');
-    Route::post('/', [PropertiController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [PropertiController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
-    Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
-    Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
-    Route::get('/{id}/spesifikasi', [PropertiController::class, 'spesifikasi'])->name('spesifikasi');
+Route::prefix('umrah')->name('umrah.')->group(function () {
+    Route::get('/', [UmrahController::class, 'index'])->name('index');
+    Route::get('/create', [UmrahController::class, 'create'])->name('create');
+    Route::post('/', [UmrahController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [UmrahController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [UmrahController::class, 'update'])->name('update');
+    Route::delete('/{id}', [UmrahController::class, 'destroy'])->name('destroy');
+    Route::put('/{id}/change-status', [UmrahController::class, 'changeStatus'])->name('changeStatus');
+    Route::get('/{id}/spesifikasi', [UmrahController::class, 'spesifikasi'])->name('spesifikasi');
 
 });
 

@@ -99,7 +99,7 @@
                         <a href="{{ route('properti.spesifikasi', $properti->id) }}">
                             @foreach ($properti->fotos as $foto)
                                 <img src="{{ asset('storage/foto_properti/' . $foto->path) }}" alt="{{ $properti->judul_produk }}"
-                                    class="w-full h-100 object-cover">
+                                    class="w-full h-40 object-cover">
                                 @break <!-- Show only the first photo -->
                             @endforeach
                             <div class="p-2 md:p-4">

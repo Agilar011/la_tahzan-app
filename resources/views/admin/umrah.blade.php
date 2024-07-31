@@ -110,7 +110,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($umrahs as $umrah)
+                    @foreach ($umrah as $umrah)
                         <tr id="umrah-{{ $umrah->id }}">
                             <td>
                                 <ul>

@@ -176,7 +176,7 @@
             @endforeach
         </div>
         <div class="flex flex-col items-center justify-center mt-8">
-            <a href="#" class="px-4 py-2 bg-slate-800 rounded-lg text-white hover:bg-slate-400 hover:text-black ">
+            <a href="{{ route('umrah.index') }}" class="px-4 py-2 bg-slate-800 rounded-lg text-white hover:bg-slate-400 hover:text-black ">
                 <h1 class="text-xl font-bold ">Etalase Umrah</h1>
             </a>
             {{-- <p class="text-gray-500 text-center mt-4">Choose the best property products that suit your needs</p> --}}

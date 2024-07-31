@@ -6,10 +6,69 @@ use Illuminate\Http\Request;
 use App\Models\Umrah;
 use App\Models\SpesifikasiUmrah;
 use App\Models\FotoUmrah;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UmrahController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $query = Umrah::query();
+
+        if ($request->filled('min_price') || $request->filled('max_price')) {
+            $minPrice = $request->input('min_price', 0);
+            $maxPrice = $request->input('max_price', PHP_INT_MAX);
+            $query->whereBetween('harga', [$minPrice, $maxPrice]);
+        }
+
+        if ($request->filled('agen_travel')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('agen_travel', $request->input('agen_travel'));
+            });
+        }
+
+        if ($request->filled('durasi')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('durasi', $request->input('durasi'));
+            });
+        }
+
+        if ($request->filled('maskapai')) {
+            $query->whereHas('spesifikasi', function ($q) use ($request) {
+                $q->whereIn('maskapai', $request->input('maskapai'));
+            });
+        }
+
+        // Check if no filters are applied
+        if (!$request->filled('min_price') && !$request->filled('max_price')) {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // Get property data with related specifications and photos for admin
+                    $umrah = Umrah::with('spesifikasi', 'fotos')->get();
+                    return view('admin.umrah', compact('umrah'));
+                } else {
+                    // Get property data with related specifications and photos for customers
+                    $umrah = Umrah::with('spesifikasi', 'fotos')->get();
+                    return view('customer.umrah', compact('umrah'));
+                }
+            } else {
+                // For unauthenticated users, get property data with related specifications and photos
+                $umrah = Umrah::with('spesifikasi', 'fotos')->get();
+                $agen_travel = SpesifikasiUmrah::select('agen_travel')->distinct()->get();
+                $durasi = SpesifikasiUmrah::select('durasi')->distinct()->get();
+                $maskapai = SpesifikasiUmrah::select('maskapai')->distinct()->get();
+                return view('customer.umrah', compact('umrah', 'agen_travel', 'durasi', 'maskapai'));
+            }
+        } else {
+            // Get properties within the price range and with other filters
+            $umrah = $query->with('spesifikasi', 'fotos')->get();
+            return view('customer.umrah', compact('umrah'));
+        }
+    }
+
     public function store(Request $request)
     {
         // Validasi data
@@ -47,11 +106,13 @@ class UmrahController extends Controller
         // Simpan data ke tabel foto_umrah
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
-                $path = $file->store('public/foto_umrah');
-                FotoUmrah::create([
-                    'umrah_id' => $umrah->id,
-                    'path' => $path
-                ]);
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_umrah', $filename); // Menyimpan file dengan nama yang dihasilkan
+
+                $foto = new FotoUmrah();
+                $foto->umrah_id = $umrah->id;
+                $foto->path = $filename; // Menyimpan nama file saja di database
+                $foto->save();
             }
         }
 
@@ -101,13 +162,25 @@ class UmrahController extends Controller
 
         // Update data di tabel foto_umrah jika ada file baru yang diupload
         if ($request->hasFile('foto')) {
-            // Simpan foto baru
-            foreach ($request->file('foto') as $file) {
-                $path = $file->store('public/foto_umrah');
-                FotoUmrah::create([
-                    'umrah_id' => $umrah->id,
-                    'path' => $path
-                ]);
+            $foto_existing = $request->input('foto_existing', []);
+            foreach ($request->file('foto') as $key => $file) {
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_umrah', $filename); // Menyimpan file dengan nama yang dihasilkan
+
+                if (isset($foto_existing[$key])) {
+                    // Replace existing photo
+                    $foto = FotoUmrah::where('path', $foto_existing[$key])->first();
+                    if ($foto) {
+                        Storage::delete('public/foto_umrah/' . $foto->path); // Menghapus file lama
+                        $foto->update(['path' => $filename]); // Memperbarui dengan nama file baru
+                    }
+                } else {
+                    // Add new photo
+                    FotoUmrah::create([
+                        'umrah_id' => $umrah->id,
+                        'path' => $filename // Menyimpan nama file saja di database
+                    ]);
+                }
             }
         }
 
@@ -134,11 +207,11 @@ class UmrahController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function index()
-    {
-        $umrahs = Umrah::with('spesifikasi', 'fotos')->get();
-        return view('admin.umrah', compact('umrahs'));
-    }
+    // public function index()
+    // {
+    //     $umrahs = Umrah::with('spesifikasi', 'fotos')->get();
+    //     return view('admin.umrah', compact('umrahs'));
+    // }
 
     public function toggleStatus($id, Request $request)
     {
