@@ -112,7 +112,7 @@
                             <p class="font-bold text-lg md:text-xl">Rp.
                                 {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
                             <h2 class="mt-4text-lg md:text-xl">{{ $otomotif->judul_produk }}</h2>
-                            <p class="mt-1 text-gray-500">{{ $otomotif->deskripsi_produk }}</p>
+                            <p class="mt-1 text-gray-500">{{ $otomotif->spesifikasi->brand }}</p>
                         </div>
                     </a>
                 </div>
