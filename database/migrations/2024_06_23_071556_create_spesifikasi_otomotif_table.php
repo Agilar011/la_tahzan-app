@@ -20,6 +20,7 @@ class CreateSpesifikasiOtomotifTable extends Migration
             $table->string('seller');
             $table->string('address');
             $table->string('phone');
+            $table->string('status_seller');
             $table->string('kilometer');
             $table->string('kapasitas_mesin');
             $table->date('tahun_pembuatan');

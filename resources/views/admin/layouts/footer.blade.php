@@ -60,7 +60,7 @@
             var button = $(this);
 
             $.ajax({
-                url: '{{ route('admin.user.changeRole', '') }}/' + userId,
+                url: '{{ route('admin.user.changeRole', ':id') }}'.replace(':id', userId),
                 method: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}'
@@ -68,11 +68,60 @@
                 success: function(response) {
                     if (response.status === 'success') {
                         var roleCell = $('#user-' + userId).find('.user-role');
+                        var statusSellerCell = $('#user-' + userId).find('.user-status-seller');
                         roleCell.text(response.new_role);
+
+                        // Update status seller based on new role
+                        if (response.new_role === 'seller') {
+                            statusSellerCell.text('Common');
+                        } else {
+                            statusSellerCell.text('');
+                        }
                     }
                 }
             });
         });
+
+        // AJAX untuk mengubah tipe seller
+        $('.change-seller-type').click(function() {
+            var userId = $(this).data('id');
+            var button = $(this);
+
+            var roleCell = $('#user-' + userId).find('.user-role');
+            var statusSellerCell = $('#user-' + userId).find('.user-status-seller');
+            var currentStatus = statusSellerCell.text();
+            var newStatus;
+
+            if (roleCell.text() !== 'seller') {
+                alert('Role harus seller untuk mengubah tipe seller');
+                return;
+            }
+
+            if (currentStatus === 'Common') {
+                newStatus = 'VIP';
+            } else if (currentStatus === 'VIP') {
+                newStatus = 'Star Seller';
+            } else if (currentStatus === 'Star Seller') {
+                newStatus = 'Common';
+            } else {
+                newStatus = 'Common';
+            }
+
+            $.ajax({
+                url: '{{ route('admin.user.changeSellerType', ':id') }}'.replace(':id', userId),
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    status_seller: newStatus
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        statusSellerCell.text(newStatus);
+                    }
+                }
+            });
+        });
+
     });
 </script>
 

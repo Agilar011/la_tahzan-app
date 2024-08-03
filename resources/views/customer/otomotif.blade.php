@@ -105,7 +105,7 @@
                         <a href="{{ route('otomotif.spesifikasi', $otomotif->id) }}">
                             @foreach ($otomotif->fotos as $foto)
                             <img src="{{ asset('storage/foto_otomotif/' . $foto->path) }}" alt="{{ $otomotif->judul_produk }}"
-                                class="w-full h-40 object-cover">
+                                class="w-full h-52 object-cover">
                             @break <!-- Show only the first photo -->
                         @endforeach
                         <div class="p-2 md:p-4">

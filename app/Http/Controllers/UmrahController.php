@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Datetime;
 use Illuminate\Http\Request;
 use App\Models\Umrah;
 use App\Models\SpesifikasiUmrah;
@@ -221,4 +222,19 @@ class UmrahController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function spesifikasi($id)
+    {
+        $umrah = Umrah::join('spesifikasi_umrah', 'umrah.id', '=', 'spesifikasi_umrah.umrah_id')
+            ->with('spesifikasi', 'fotos')
+            ->findOrFail($id);
+
+        $umrah->jumlahProduk = SpesifikasiUmrah::where('umrah_id', $umrah->id)->count();
+        $umrah->sellerBergabung = SpesifikasiUmrah::where('umrah_id', $umrah->id)
+            ->min('created_at');
+        $umrah->sellerBergabung = (new DateTime($umrah->sellerBergabung))->format('d F Y');
+
+        return view('customer.spesifikasi-umrah', compact('umrah'));
+    }
+
 }

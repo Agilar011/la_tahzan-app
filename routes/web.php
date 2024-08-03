@@ -9,9 +9,6 @@ use App\Http\Controllers\PropertiController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('welcome');
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::prefix('umrah')->name('umrah.')->group(function () {
     Route::get('/', [UmrahController::class, 'index'])->name('index');
@@ -22,9 +19,7 @@ Route::prefix('umrah')->name('umrah.')->group(function () {
     Route::delete('/{id}', [UmrahController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [UmrahController::class, 'changeStatus'])->name('changeStatus');
     Route::get('/{id}/spesifikasi', [UmrahController::class, 'spesifikasi'])->name('spesifikasi');
-
 });
-
 
 Route::prefix('otomotif')->name('otomotif.')->group(function () {
     Route::get('/', [OtomotifController::class, 'index'])->name('index');
@@ -35,7 +30,6 @@ Route::prefix('otomotif')->name('otomotif.')->group(function () {
     Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
     Route::get('/{id}/spesifikasi', [OtomotifController::class, 'spesifikasi'])->name('spesifikasi');
-
 });
 
 Route::prefix('properti')->name('properti.')->group(function () {
@@ -46,11 +40,7 @@ Route::prefix('properti')->name('properti.')->group(function () {
     Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
     Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
-    Route::get('/{id}/spesifikasi', [PropertiController::class, 'spesifikasi'])->name('spesifikasi');
-
 });
-
-
 
 Route::middleware([
     'auth:sanctum',
@@ -66,7 +56,8 @@ Route::middleware([
             })->name('dashboard');
 
             Route::get('user', [AdminController::class, 'index'])->name('user');
-            Route::post('user/change-role/{id}', [AdminController::class, 'changeRole'])->name('user.changeRole');
+            Route::post('user/changeRole/{id}', [AdminController::class, 'changeRole'])->name('user.changeRole');
+            Route::post('user/changeSellerType/{id}', [AdminController::class, 'changeSellerType'])->name('user.changeSellerType');
 
             Route::get('input/input-umrah', function () {
                 return view('admin.input.input-umrah');
@@ -100,10 +91,6 @@ Route::middleware([
                 Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
                 Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
             });
-
-            // Route::get('properti', function () {
-            //     return view('admin.properti');
-            // })->name('properti');
         });
 
         Route::middleware(['customer'])->prefix('customer')->name('customer.')->group(function () {
@@ -112,7 +99,6 @@ Route::middleware([
             })->name('dashboard');
 
             Route::get('user', [AdminController::class, 'index'])->name('user');
-            Route::post('user/change-role/{id}', [AdminController::class, 'changeRole'])->name('user.changeRole');
 
             Route::get('input/input-umrah', function () {
                 return view('admin.input.input-umrah');
@@ -136,7 +122,6 @@ Route::middleware([
                 Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
                 Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
                 Route::get('/{id}/spesifikasi', [OtomotifController::class, 'spesifikasi'])->name('spesifikasi');
-
             });
 
             Route::prefix('properti')->name('properti.')->group(function () {
@@ -148,7 +133,6 @@ Route::middleware([
                 Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
                 Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
             });
-
         });
     });
 });

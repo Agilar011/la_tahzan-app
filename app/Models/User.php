@@ -30,6 +30,7 @@ class User extends Authenticatable
         'birthday',
         'age',
         'gender',
+        'status_seller',
         'email',
         'ktp',
         'password',

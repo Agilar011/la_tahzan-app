@@ -119,6 +119,7 @@
                                     <li>Nama: {{ $item->spesifikasi->seller }}</li>
                                     <li>Telfon: {{ $item->spesifikasi->phone }}</li>
                                     <li>Alamat: {{ $item->spesifikasi->address }}</li>
+                                    <li>Status Seller: {{ $item->spesifikasi->status_seller }}</li>
                                 </ul>
                             </td>
                             <td data-label="Judul Produk">{{ $item->judul_produk }}</td>

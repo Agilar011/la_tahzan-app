@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->string('age')->nullable();
             $table->enum('gender', ['Pria', 'Wanita'])->nullable();
+            $table->enum('status_seller', ['Common', 'VIP', 'Star Seller']);
             $table->string('email')->unique();
             $table->string('ktp')->nullable()->unique();
             $table->string('password');

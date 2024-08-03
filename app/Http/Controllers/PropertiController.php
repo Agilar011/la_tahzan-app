@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Properti;
 use App\Models\SpesifikasiProperti;
@@ -236,6 +237,20 @@ class PropertiController extends Controller
         $properti->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function spesifikasi($id)
+    {
+        $properti = Properti::join('spesifikasi_properti', 'properti.id', '=', 'spesifikasi_properti.properti_id')
+        ->join('users', 'spesifikasi_properti.user_id', '=', 'users.id')
+        ->with('spesifikasi', 'fotos')->findOrFail($id);
+
+        $properti->jumlahProduk = SpesifikasiProperti::where('user_id', $properti->user_id)->count();
+        $properti->sellerBergabung = SpesifikasiProperti::where('user_id', $properti->user_id)
+                ->min('created_at');
+                $properti->sellerBergabung = (new DateTime($properti->sellerBergabung))->format('d F Y');
+
+        return view('customer.spesifikasi-properti', compact('properti'));
     }
 }
 

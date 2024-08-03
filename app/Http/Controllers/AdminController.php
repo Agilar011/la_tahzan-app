@@ -28,4 +28,38 @@ class AdminController extends Controller
 
         return response()->json(['status' => 'success', 'new_role' => $user->role]);
     }
+
+    public function changeSellerType(Request $request, $id)
+    {
+    $user = User::findOrFail($id);
+
+    if ($user->role !== 'seller') {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'User must be a seller to change seller type'
+        ]);
+    }
+
+    $currentStatus = $user->status_seller;
+    $newStatus = '';
+
+    if ($currentStatus === 'Common') {
+        $newStatus = 'VIP';
+    } elseif ($currentStatus === 'VIP') {
+        $newStatus = 'Star Seller';
+    } elseif ($currentStatus === 'Star Seller') {
+        $newStatus = 'Common';
+    } else {
+        $newStatus = 'Common';
+    }
+
+    $user->status_seller = $newStatus;
+    $user->save();
+
+    return response()->json([
+        'status' => 'success',
+        'new_status_seller' => $user->status_seller
+    ]);
+    }
+
 }

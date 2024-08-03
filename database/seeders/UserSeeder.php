@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'birthday' => '1990-01-01',
             'age' => '30',
             'gender' => 'Pria',
-            'email' => 'admin@admin.com',
+            'email' => 'adimas@admin.com',
             'ktp' => '1234567890',
             'password' => Hash::make('password'),
             'google_id' => null,

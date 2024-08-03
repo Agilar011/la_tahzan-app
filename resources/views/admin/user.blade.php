@@ -16,6 +16,7 @@
                     <th>Nomor Telfon</th>
                     <th>Tanggal Lahir</th>
                     <th>Role</th>
+                    <th>Status Seller</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -28,8 +29,10 @@
                     <td>{{ $user->phone }}</td>
                     <td>{{ $user->birthdate }}</td>
                     <td class="user-role">{{ $user->role }}</td>
+                    <td class="user-status-seller">{{ $user->status_seller }}</td>
                     <td>
                         <button type="button" class="btn btn-block btn-success btn-xs change-role" data-id="{{ $user->id }}">Ubah Role</button>
+                        <button type="button" class="btn btn-block btn-info btn-xs change-seller-type" data-id="{{ $user->id }}">Ubah Tipe Seller</button>
                         <button type="button" class="btn btn-block btn-primary btn-xs">Update</button>
                         <button type="button" class="btn btn-block btn-danger btn-xs">Hapus</button>
                     </td>
