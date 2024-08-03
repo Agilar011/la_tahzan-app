@@ -18,11 +18,11 @@ class DashboardController extends Controller
         $otomotif = Otomotif::select('otomotif.*')
         ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
         ->with('spesifikasi', 'fotos')
-        ->orderBy('spesifikasi_otomotif.some_column', 'desc') // Ganti `some_column` dengan kolom yang benar
+        ->orderBy('spesifikasi_otomotif.status_seller', 'asc') // Ganti `some_column` dengan kolom yang benar
         ->take(12)
         ->get();
 
-        
+
 
 
         $properti = Properti::orderBy('created_at', 'desc')->take(12)->get();
