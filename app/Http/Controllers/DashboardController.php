@@ -15,7 +15,15 @@ class DashboardController extends Controller
     {
         $umrah = Umrah::orderBy('created_at', 'desc')->take(3)->get();
 
-        $otomotif = Otomotif::orderBy('created_at', 'desc')->take(12)->get();
+        $otomotif = Otomotif::select('otomotif.*')
+        ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+        ->with('spesifikasi', 'fotos')
+        ->orderBy('spesifikasi_otomotif.some_column', 'desc') // Ganti `some_column` dengan kolom yang benar
+        ->take(12)
+        ->get();
+
+        
+
 
         $properti = Properti::orderBy('created_at', 'desc')->take(12)->get();
 
