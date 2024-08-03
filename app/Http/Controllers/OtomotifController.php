@@ -127,6 +127,10 @@ class OtomotifController extends Controller
             }
         }
 
+         // Tempat data warehouse
+        // $warehouse->produk_id = $otomotif->id;
+        // $warehouse->category = 'otomotif';
+
         return redirect()->route('admin.otomotif.index')->with('success', 'Otomotif created successfully.');
     }
 
