@@ -37,10 +37,10 @@ class OtomotifController extends Controller
         if (is_null($request->min_price) && is_null($request->max_price)) {
             if (Auth::check()) {
                 if (Auth::user()->role == 'admin') {
-                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->orderBy('created_at', 'desc')->get();
+                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->orderBy('created_at', 'asc')->get();
                     return view('admin.otomotif', compact('otomotif'));
                 } else {
-                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->orderBy('created_at', 'desc')->get();
+                    $otomotif = Otomotif::with('spesifikasi', 'fotos')->orderBy('created_at', 'asc')->get();
                     $transmisi = SpesifikasiOtomotif::select('transmisi')->distinct()->get();
                     return view('customer.otomotif', compact('otomotif', 'transmisi'));
                 }
@@ -58,7 +58,7 @@ class OtomotifController extends Controller
 
             $otomotif = Otomotif::with('spesifikasi', 'fotos')
                 ->whereBetween('harga', [$minPrice, $maxPrice])
-                ->orderBy('created_at', 'desc')
+                ->orderBy('status_seller', 'asc')
                 ->get();
 
             return view('customer.otomotif', compact('otomotif'));

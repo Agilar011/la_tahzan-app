@@ -73,7 +73,7 @@
 
                         // Update status seller based on new role
                         if (response.new_role === 'seller') {
-                            statusSellerCell.text('Common');
+                            statusSellerCell.text('3Common');
                         } else {
                             statusSellerCell.text('');
                         }
@@ -97,14 +97,14 @@
                 return;
             }
 
-            if (currentStatus === 'Common') {
-                newStatus = 'VIP';
-            } else if (currentStatus === 'VIP') {
-                newStatus = 'Star Seller';
-            } else if (currentStatus === 'Star Seller') {
-                newStatus = 'Common';
+            if (currentStatus === '3Common') {
+                newStatus = '1VIP';
+            } else if (currentStatus === '1VIP') {
+                newStatus = '2Star Seller';
+            } else if (currentStatus === '2Star Seller') {
+                newStatus = '3Common';
             } else {
-                newStatus = 'Common';
+                newStatus = '3Common';
             }
 
             $.ajax({

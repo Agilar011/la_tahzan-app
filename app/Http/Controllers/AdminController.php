@@ -43,14 +43,14 @@ class AdminController extends Controller
     $currentStatus = $user->status_seller;
     $newStatus = '';
 
-    if ($currentStatus === 'Common') {
-        $newStatus = 'VIP';
-    } elseif ($currentStatus === 'VIP') {
-        $newStatus = 'Star Seller';
-    } elseif ($currentStatus === 'Star Seller') {
-        $newStatus = 'Common';
+    if ($currentStatus === '3Common') {
+        $newStatus = '1VIP';
+    } elseif ($currentStatus === '1VIP') {
+        $newStatus = '2Star Seller';
+    } elseif ($currentStatus === '2Star Seller') {
+        $newStatus = '3Common';
     } else {
-        $newStatus = 'Common';
+        $newStatus = '3Common';
     }
 
     $user->status_seller = $newStatus;

@@ -202,14 +202,14 @@
         @foreach ($otomotif as $item)
             <div class="relative flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                 <!-- Badge for Star Seller or VIP -->
-                @if ($item->spesifikasi->status_seller == 'Star Seller')
+                @if ($item->spesifikasi->status_seller == '2Star Seller')
                     <div class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.27l5.18 3.73-1.64-5.81 4.82-3.97-6.1-.47L12 2l-2.26 8.75-6.1.47 4.82 3.97-1.64 5.81L12 17.27z"></path>
                         </svg>
                         <span>Star Seller</span>
                     </div>
-                @elseif ($item->spesifikasi->status_seller == 'VIP')
+                @elseif ($item->spesifikasi->status_seller == '1VIP')
                     <div class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 21h14M9 18v-3a3 3 0 016 0v3"></path>
@@ -254,34 +254,50 @@
 
 {{-- Section Property --}}
 <div>
-<div class="flex flex-col items-center justify-center">
-    <h1 class="text-4xl font-bold mt-16">Etalase Property</h1>
-    <p class="text-gray-500 text-center mt-4">Choose the best property products that suit your needs</p>
-</div>
-
-<div class="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 mt-8">
-    @foreach ($properti as $item)
-        <div class="flex flex-col bg-white shadow-lg rounded-sm overflow-hidden">
-            <a href="{{ route('properti.spesifikasi', $item->id) }}">
-                @foreach ($item->fotos as $foto)
-                    <img src="{{ asset('storage/foto_properti/' . $foto->path) }}" alt="{{ $item->judul_produk }}"
-                        class="w-full h-64 object-cover">
-                @break
-
-                <!-- Show only the first photo -->
-            @endforeach
-
-            <div class="p-6">
-                <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
-                <p class="mt-2 text-lg">{{ $item->judul_produk }}</p>
-                <div class="flex items-center text-gray-500 mt-2">
-                    <img src="{{ asset('loc.png') }}" alt="Logo" class="h-4 mr-1">
-                    <p class="text-sm">{{ $item->spesifikasi->kota }}, {{ $item->spesifikasi->provinsi }}</p>
-                </div>
-            </div>
-        </a>
+    <div class="flex flex-col items-center justify-center">
+        <h1 class="text-4xl font-bold mt-16">Etalase Property</h1>
+        <p class="text-gray-500 text-center mt-4">Choose the best property products that suit your needs</p>
     </div>
-@endforeach
+
+    <div class="w-11/12 mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 mt-8">
+        @foreach ($properti as $item)
+            <div class="relative flex flex-col bg-white shadow-lg rounded-sm overflow-hidden">
+                <!-- Badge for Star Seller or VIP -->
+                @if ($item->spesifikasi->status_seller == 'Star Seller')
+                    <div class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.27l5.18 3.73-1.64-5.81 4.82-3.97-6.1-.47L12 2l-2.26 8.75-6.1.47 4.82 3.97-1.64 5.81L12 17.27z"></path>
+                        </svg>
+                        <span>Star Seller</span>
+                    </div>
+                @elseif ($item->spesifikasi->status_seller == 'VIP')
+                    <div class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 21h14M9 18v-3a3 3 0 016 0v3"></path>
+                        </svg>
+                        <span>VIP</span>
+                    </div>
+                @endif
+
+                <a href="{{ route('properti.spesifikasi', $item->id) }}">
+                    @foreach ($item->fotos as $foto)
+                        <img src="{{ asset('storage/foto_properti/' . $foto->path) }}" alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
+                        @break <!-- Show only the first photo -->
+                    @endforeach
+
+                    <div class="p-6">
+                        <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                        <p class="mt-2 text-lg">{{ $item->judul_produk }}</p>
+                        <div class="flex items-center text-gray-500 mt-2">
+                            <img src="{{ asset('loc.png') }}" alt="Logo" class="h-4 mr-1">
+                            <p class="text-sm">{{ $item->spesifikasi->kota }}, {{ $item->spesifikasi->provinsi }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @endforeach
+    </div>
+</div>
 
 </div>
 

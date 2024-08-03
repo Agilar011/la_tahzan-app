@@ -40,6 +40,7 @@ Route::prefix('properti')->name('properti.')->group(function () {
     Route::put('/{id}', [PropertiController::class, 'update'])->name('update');
     Route::delete('/{id}', [PropertiController::class, 'destroy'])->name('destroy');
     Route::put('/{id}/change-status', [PropertiController::class, 'changeStatus'])->name('changeStatus');
+    Route::get('/{id}/spesifikasi', [PropertiController::class, 'spesifikasi'])->name('spesifikasi');
 });
 
 Route::middleware([

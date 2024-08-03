@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
         $otomotif = Otomotif::orderBy('created_at', 'desc')->take(12)->get();
 
-        $properti = properti::orderBy('created_at', 'desc')->take(12)->get();
+        $properti = Properti::orderBy('created_at', 'desc')->take(12)->get();
 
 
         return view('welcome', compact('umrah', 'otomotif', 'properti'));
