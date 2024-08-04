@@ -125,15 +125,26 @@
                             <td data-label="Judul Produk">{{ $item->judul_produk }}</td>
                             <td data-label="Deskripsi Produk">
                                 <ul>
-                                    <li>Brand : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->brand }}</span></li>
-                                    <li>Jenis Otomotif : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->type }}</span></li>
-                                    <li>Tipe : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->subtype }}</span></li>
-                                    <li>Kapasitas Mesin : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->kapasitas_mesin }}cc</span></li>
-                                    <li>Transmisi : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->transmisi }}</span></li>
-                                    <li>ODO Trip : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->kilometer }}km</span></li>
-                                    <li>Tahun Pembuatan : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->tahun_pembuatan }}</span></li>
-                                    <li>BPKB : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->bpkb }}</span></li>
-                                    <li>STNK : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->stnk }}</span></li>
+                                    <li>Brand : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->brand }}</span>
+                                    </li>
+                                    <li>Jenis Otomotif : <span
+                                            style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->type }}</span></li>
+                                    <li>Tipe : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->subtype }}</span>
+                                    </li>
+                                    <li>Kapasitas Mesin : <span
+                                            style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->kapasitas_mesin }}cc</span>
+                                    </li>
+                                    <li>Transmisi : <span
+                                            style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->transmisi }}</span></li>
+                                    <li>ODO Trip : <span
+                                            style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->kilometer }}km</span></li>
+                                    <li>Tahun Pembuatan : <span
+                                            style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->tahun_pembuatan }}</span>
+                                    </li>
+                                    <li>BPKB : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->bpkb }}</span>
+                                    </li>
+                                    <li>STNK : <span style="color:rgb(2, 0, 128)">{{ $item->spesifikasi->stnk }}</span>
+                                    </li>
                                 </ul>
                             </td>
                             <td data-label="Harga">Rp. {{ number_format($item->harga, 0, ',', '.') }},-</td>
@@ -255,7 +266,7 @@
                 });
         }
 
-        function startCountdown(id, initialTimeLeft = 15) { // 1 hour in seconds
+        function startCountdown(id, initialTimeLeft = 3600) { // 1 hour in seconds
             let countdownElement = document.getElementById(`countdown-${id}`);
             let timeLeft = initialTimeLeft;
             const countdownEnd = new Date().getTime() + timeLeft * 1000;
