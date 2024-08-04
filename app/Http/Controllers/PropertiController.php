@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Properti;
-use App\Models\Warehouse;
 use App\Models\SpesifikasiProperti;
 use App\Models\FotoProperti;
 use Illuminate\Support\Facades\Auth;
@@ -103,19 +102,8 @@ class PropertiController extends Controller
         $properti->status_payment = 'unpaid';
         $properti->save();
 
-        // Tempat data warehouse
-        $warehouse = new Warehouse();
-        $warehouse->judul_produk = $request->judul_produk;
-        $warehouse->kategori = 'properti';
-        $warehouse->deskripsi_produk = $request->deskripsi_produk;
-        $warehouse->harga = $request->harga;
-        $warehouse->status_ads = 'pending';
-        $warehouse->status_payment = 'unpaid';
-        $warehouse->save();
-
         $spesifikasi = new SpesifikasiProperti();
         $spesifikasi->properti_id = $properti->id;
-        $spesifikasi->warehouse_id = $warehouse->id;
         $spesifikasi->user_id = Auth::id();
         $spesifikasi->alamat = $request->alamat;
         $spesifikasi->kota = $request->kota;
@@ -154,80 +142,68 @@ class PropertiController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'judul_produk' => 'required|string|max:255',
-        'deskripsi_produk' => 'required',
-        'harga' => 'required|numeric',
-        'alamat' => 'required|string|max:255',
-        'kota' => 'required|string|max:255',
-        'provinsi' => 'required|string|max:255',
-        'jenis_properti' => 'required|string|max:255',
-        'luas_tanah' => 'required|string|max:255',
-        'luas_bangunan' => 'nullable|string|max:255',
-        'jumlah_kamar_tidur' => 'nullable|integer',
-        'jumlah_kamar_mandi' => 'nullable|integer',
-        'fasilitas' => 'required',
-        'sertifikat' => 'required|in:ya,tidak',
-        'foto.*' => 'image|mimes:jpeg,png,jpg,svg|max:5120' // Validasi file foto
-    ]);
+    {
+        $request->validate([
+            'judul_produk' => 'required|string|max:255',
+            'deskripsi_produk' => 'required',
+            'harga' => 'required|numeric',
+            'alamat' => 'required|string|max:255',
+            'kota' => 'required|string|max:255',
+            'provinsi' => 'required|string|max:255',
+            'jenis_properti' => 'required|string|max:255',
+            'luas_tanah' => 'required|string|max:255',
+            'luas_bangunan' => 'nullable|string|max:255',
+            'jumlah_kamar_tidur' => 'nullable|integer',
+            'jumlah_kamar_mandi' => 'nullable|integer',
+            'fasilitas' => 'required',
+            'sertifikat' => 'required|in:ya,tidak',
+            'foto.*' => 'image|mimes:jpeg,png,jpg,svg|max:5120' // Validasi file foto
+        ]);
 
-    // Update Properti
-    $properti = Properti::findOrFail($id);
-    $properti->judul_produk = $request->judul_produk;
-    $properti->deskripsi_produk = $request->deskripsi_produk;
-    $properti->harga = $request->harga;
-    $properti->save();
+        $properti = Properti::findOrFail($id);
+        $properti->judul_produk = $request->judul_produk;
+        $properti->deskripsi_produk = $request->deskripsi_produk;
+        $properti->harga = $request->harga;
+        $properti->save();
 
-    // Update Warehouse
-    $warehouse = Warehouse::find($properti->warehouse_id); // Asumsi ada field warehouse_id di tabel Properti
-    if ($warehouse) {
-        $warehouse->judul_produk = $request->judul_produk;
-        $warehouse->deskripsi_produk = $request->deskripsi_produk;
-        $warehouse->harga = $request->harga;
-        $warehouse->save();
-    }
+        $spesifikasi = SpesifikasiProperti::where('properti_id', $properti->id)->first();
+        $spesifikasi->alamat = $request->alamat;
+        $spesifikasi->kota = $request->kota;
+        $spesifikasi->provinsi = $request->provinsi;
+        $spesifikasi->jenis_properti = $request->jenis_properti;
+        $spesifikasi->luas_tanah = $request->luas_tanah;
+        $spesifikasi->luas_bangunan = $request->luas_bangunan;
+        $spesifikasi->jumlah_kamar_tidur = $request->jumlah_kamar_tidur;
+        $spesifikasi->jumlah_kamar_mandi = $request->jumlah_kamar_mandi;
+        $spesifikasi->fasilitas = $request->fasilitas;
+        $spesifikasi->sertifikat = $request->sertifikat;
+        $spesifikasi->save();
 
-    // Update Spesifikasi Properti
-    $spesifikasi = SpesifikasiProperti::where('properti_id', $properti->id)->first();
-    $spesifikasi->alamat = $request->alamat;
-    $spesifikasi->kota = $request->kota;
-    $spesifikasi->provinsi = $request->provinsi;
-    $spesifikasi->jenis_properti = $request->jenis_properti;
-    $spesifikasi->luas_tanah = $request->luas_tanah;
-    $spesifikasi->luas_bangunan = $request->luas_bangunan;
-    $spesifikasi->jumlah_kamar_tidur = $request->jumlah_kamar_tidur;
-    $spesifikasi->jumlah_kamar_mandi = $request->jumlah_kamar_mandi;
-    $spesifikasi->fasilitas = $request->fasilitas;
-    $spesifikasi->sertifikat = $request->sertifikat;
-    $spesifikasi->save();
+        if ($request->hasFile('foto')) {
+            $foto_existing = $request->input('foto_existing', []);
+            foreach ($request->file('foto') as $key => $file) {
+                $filename = $file->hashName(); // Menghasilkan nama file acak unik
+                $file->storeAs('public/foto_properti', $filename); // Menyimpan file dengan nama yang dihasilkan
 
-    // Handle Foto Properti
-    if ($request->hasFile('foto')) {
-        $foto_existing = $request->input('foto_existing', []);
-        foreach ($request->file('foto') as $key => $file) {
-            $filename = $file->hashName(); // Menghasilkan nama file acak unik
-            $file->storeAs('public/foto_properti', $filename); // Menyimpan file dengan nama yang dihasilkan
-
-            if (isset($foto_existing[$key])) {
-                // Replace existing photo
-                $foto = FotoProperti::where('path', $foto_existing[$key])->first();
-                if ($foto) {
-                    Storage::delete('public/foto_properti/' . $foto->path); // Menghapus file lama
-                    $foto->update(['path' => $filename]); // Memperbarui dengan nama file baru
+                if (isset($foto_existing[$key])) {
+                    // Replace existing photo
+                    $foto = FotoProperti::where('path', $foto_existing[$key])->first();
+                    if ($foto) {
+                        Storage::delete('public/foto_properti/' . $foto->path); // Menghapus file lama
+                        $foto->update(['path' => $filename]); // Memperbarui dengan nama file baru
+                    }
+                } else {
+                    // Add new photo
+                    FotoProperti::create([
+                        'properti_id' => $properti->id,
+                        'path' => $filename // Menyimpan nama file saja di database
+                    ]);
                 }
-            } else {
-                // Add new photo
-                FotoProperti::create([
-                    'properti_id' => $properti->id,
-                    'path' => $filename // Menyimpan nama file saja di database
-                ]);
             }
         }
-    }
 
-    return redirect()->route('admin.properti.index')->with('success', 'Properti updated successfully.');
-}
+        return redirect()->route('admin.properti.index')->with('success', 'Properti updated successfully.');
+    }
 
     public function destroy($id)
     {

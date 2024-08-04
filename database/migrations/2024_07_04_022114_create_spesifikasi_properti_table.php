@@ -11,7 +11,6 @@ class CreateSpesifikasiPropertiTable extends Migration
         Schema::create('spesifikasi_properti', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('properti_id');
-            $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('user_id');
             $table->string('alamat');
             $table->string('kota');

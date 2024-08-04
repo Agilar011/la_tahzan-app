@@ -4,147 +4,43 @@
     <div class="container mx-auto sm:p-4 bg-gray-100 min-w-full">
         <div class="bg-white rounded-lg flex flex-col sm:p-2 lg:flex-row">
             <!-- Carousel -->
+            <!-- customer/otomotif.blade.php -->
             <div class="w-full lg:w-2/3">
-                <div class="w-full grid gap-y-2">
-
-                    {{-- Div gambar utama --}}
-                    <div class="hidden sm:block rounded-xl">
-                        <img src="/img/produk otomotif 1.webp" alt="Gambar Utama" id="mainImage"
-                            class="w-full h-96 object-cover rounded-xl">
-                        <div class="hidden flex-col gap-x-2 mt-2 justify-center xl:flex sm:flex-row sm:flex-wrap">
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                <style>
+                    .carousel-image {
+                        height: 600px;
+                        /* Adjust this value as needed */
+                        object-fit: cover;
+                    }
+                </style>
+                <div id="carouselExampleIndicators" class="carousel slide rounded-xl" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if ($otomotif->fotos->isNotEmpty())
+                            <div class="carousel-item active">
+                                <img src="{{ asset('storage/foto_otomotif/' . $otomotif->fotos->first()->path) }}"
+                                    class="d-block w-100 img-fluid carousel-image" alt="Foto Otomotif">
                             </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
+                        @else
+                            <div class="carousel-item active">
+                                <img src="/path/to/default/image.jpg" class="d-block w-100 img-fluid carousel-image"
+                                    alt="Default Foto">
                             </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 5"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 6"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                        </div>
-
+                        @endif
                     </div>
-                    {{-- end div gambar --}}
-
-                    {{-- section carousel mobile --}}
-                    <style>
-                        .carousel-item {
-                            display: none;
-                            /* height: 100%; */
-                            border-radius: 10px;
-                        }.carousel-container {
-                                height: 60vh;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                overflow: hidden;
-                                /* background-color: #fff;
-                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-                                border-radius: 10px;
-                            }
-                            .carousel-item {
-                                display: none;
-                                width: auto;
-                                height: 100%;
-                                border-radius: 10px;
-                                object-fit: cover;
-                            }
-                            .carousel-item.active {
-                                display: block;
-                            }
-                        .carousel-item.active {
-                            display: block;
-                        }
-                        .button-container {
-                            position: absolute;
-                            top: 50%;
-                            width: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            transform: translateY(-50%);
-                        }
-                        .prev, .next {
-                            background-color: rgba(0, 0, 0, 0.5);
-                            color: white;
-                            border: none;
-                            padding: 10px;
-                            cursor: pointer;
-                        }
-                    </style>
-
-                    <div class="block sm:hidden">
-                        <div class="carousel-container min-h-full sm:hidden">
-                            <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1" class="carousel-item active">
-                            <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2" class="carousel-item">
-                            <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3" class="carousel-item">
-                            <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4" class="carousel-item">
-                            <div class="button-container">
-                                <button class="prev" id="prev">&#10094;</button>
-                                <button class="next" id="next">&#10095;</button>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const carouselItems = document.querySelectorAll('.carousel-item');
-                            const prevButton = document.getElementById('prev');
-                            const nextButton = document.getElementById('next');
-                            let currentIndex = 0;
-
-                            function updateCarousel() {
-                                carouselItems.forEach((item, index) => {
-                                    item.classList.toggle('active', index === currentIndex);
-                                });
-                                console.log(`updateCarousel called. Current Index: ${currentIndex}`);
-                            }
-
-                            function showNextImage() {
-                                console.log("showNextImage called. Current Index:", currentIndex);
-                                currentIndex = (currentIndex + 1) % carouselItems.length;
-                                updateCarousel();
-                                console.log("Next Image Shown. Updated Current Index:", currentIndex);
-                            }
-
-                            function showPrevImage() {
-                                console.log("showPrevImage called. Current Index:", currentIndex);
-                                currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-                                updateCarousel();
-                                console.log("Previous Image Shown. Updated Current Index:", currentIndex);
-                            }
-
-                            prevButton.addEventListener('click', showPrevImage);
-                            nextButton.addEventListener('click', showNextImage);
-
-                            setInterval(showNextImage, 5000); // Change image every 5 seconds
-
-                            updateCarousel();
-                        });
-                    </script>
-
-
-
-
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
+
+
 
             <!-- Product Details Mobile-->
             <div class="w-full pt-5 sm:hidden lg:w-1/2 lg:pl-8 ">
@@ -237,6 +133,7 @@
                 </button>
             </div>
         </div>
+
         {{-- Section Seller --}}
         <div class="flex bg-white w-full p-5 rounded-lg mt-5">
             <div class="flex w-full justify-between divide-x-4">
@@ -259,32 +156,20 @@
                     </div>
 
                     <!-- Div untuk lama bergabung -->
-                    <div class="flex text-center items-center w-full px-2">
-                        <i class="fa-solid fa-hourglass-start fa-2xl"></i>
+                    <div class="flex text-center items-center w-full">
+                        <i class="fa-solid fa-calendar-plus fa-2xl" style="color: #FFABE1;"></i>
                         <div class="items-center justify-center">
-                            <p class="ml-2 font-bold">{{ $otomotif->sellerBergabung }}</p>
-                            <p class="mt-2 mx-2">Lama Bergabung</p>
+                            <p class="ml-2 font-bold">{{ $otomotif->tahunBergabung }}</p>
+                            <p class="mt-2 mx-2">Tahun Bergabung</p>
                         </div>
                     </div>
                 </div>
+
+                <!-- Div untuk badge seller -->
+                <div class="flex justify-center items-center w-1/3 lg:w-1/4">
+                    <img src="{{ asset('img/Group 119.png') }}" alt="Trusted" class="h-16">
+                </div>
             </div>
         </div>
-
-
-
-        <script>
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 1,
-                spaceBetween: 10,
-                loop: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-            });
-        </script>
-    @endsection
+    </div>
+@endsection

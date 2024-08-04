@@ -123,6 +123,7 @@ Route::middleware([
                 Route::delete('/{id}', [OtomotifController::class, 'destroy'])->name('destroy');
                 Route::put('/{id}/change-status', [OtomotifController::class, 'changeStatus'])->name('changeStatus');
                 Route::get('/{id}/spesifikasi', [OtomotifController::class, 'spesifikasi'])->name('spesifikasi');
+                Route::get('/{id}', [OtomotifController::class, 'show'])->name('otomotif.show');
             });
 
             Route::prefix('properti')->name('properti.')->group(function () {

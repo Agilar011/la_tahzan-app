@@ -237,16 +237,24 @@ class OtomotifController extends Controller
 
     public function spesifikasi($id)
     {
-        $otomotif = Otomotif::join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
-        ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
-        ->with('spesifikasi', 'fotos')->findOrFail($id);
+        $otomotif = Otomotif::with('fotos') // Make sure fotos relationship is loaded
+            ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+            ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
+            ->findOrFail($id);
 
+        // Fetch the number of products and seller join date
         $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
         $otomotif->sellerBergabung = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)
                 ->min('created_at');
-                $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
+        $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
 
         return view('customer.spesifikasi-otomotif', compact('otomotif'));
+    }
+
+    public function show($id)
+    {
+    $otomotif = Otomotif::with('fotos')->findOrFail($id);
+    return view('customer.otomotif', compact('otomotif'));
     }
 
 
