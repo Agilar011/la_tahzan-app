@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Properti;
+use App\Models\Warehouse;
 use App\Models\SpesifikasiProperti;
 use App\Models\FotoProperti;
 use Illuminate\Support\Facades\Auth;
@@ -102,8 +103,19 @@ class PropertiController extends Controller
         $properti->status_payment = 'unpaid';
         $properti->save();
 
+        // Tempat data warehouse
+        $warehouse = new Warehouse();
+        $warehouse->judul_produk = $request->judul_produk;
+        $warehouse->kategori = 'properti';
+        $warehouse->deskripsi_produk = $request->deskripsi_produk;
+        $warehouse->harga = $request->harga;
+        $warehouse->status_ads = 'pending';
+        $warehouse->status_payment = 'unpaid';
+        $warehouse->save();
+
         $spesifikasi = new SpesifikasiProperti();
         $spesifikasi->properti_id = $properti->id;
+        $spesifikasi->warehouse_id = $warehouse->id;
         $spesifikasi->user_id = Auth::id();
         $spesifikasi->alamat = $request->alamat;
         $spesifikasi->kota = $request->kota;
@@ -165,6 +177,13 @@ class PropertiController extends Controller
         $properti->deskripsi_produk = $request->deskripsi_produk;
         $properti->harga = $request->harga;
         $properti->save();
+
+        $warehouse = Warehouse::findOrFail($id);
+        $warehouse->update([
+            'judul_produk' => $request->judul_produk,
+            'deskripsi_produk' => $request->deskripsi_produk,
+            'harga' => $request->harga,
+        ]);
 
         $spesifikasi = SpesifikasiProperti::where('properti_id', $properti->id)->first();
         $spesifikasi->alamat = $request->alamat;
