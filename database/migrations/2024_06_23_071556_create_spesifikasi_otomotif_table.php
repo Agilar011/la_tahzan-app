@@ -11,6 +11,7 @@ class CreateSpesifikasiOtomotifTable extends Migration
         Schema::create('spesifikasi_otomotif', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('otomotif_id');
+            $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('user_id');
             $table->enum('transmisi', ['manual', 'matic']);
             $table->enum('stnk', ['ya', 'tidak']);

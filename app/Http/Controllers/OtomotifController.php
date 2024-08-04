@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Otomotif;
+use App\Models\Warehouse;
 use App\Models\SpesifikasiOtomotif;
 use App\Models\FotoOtomotif;
 use Illuminate\Support\Facades\Auth;
@@ -97,8 +98,19 @@ class OtomotifController extends Controller
         $otomotif->status_payment = 'unpaid';
         $otomotif->save();
 
+         // Tempat data warehouse
+         $warehouse = new Warehouse();
+         $warehouse->judul_produk = $request->judul_produk;
+         $warehouse->kategori = 'otomotif';
+         $warehouse->deskripsi_produk = $request->deskripsi_produk;
+         $warehouse->harga = $request->harga;
+         $warehouse->status_ads = 'pending';
+         $warehouse->status_payment = 'unpaid';
+         $warehouse->save();
+
         $spesifikasi = new SpesifikasiOtomotif();
         $spesifikasi->otomotif_id = $otomotif->id;
+        $spesifikasi->warehouse_id = $warehouse->id;
         $spesifikasi->user_id = Auth::id();
         $spesifikasi->seller = Auth::user()->name;
         $spesifikasi->phone = Auth::user()->phone;
@@ -126,10 +138,6 @@ class OtomotifController extends Controller
                 $foto->save();
             }
         }
-
-         // Tempat data warehouse
-        // $warehouse->produk_id = $otomotif->id;
-        // $warehouse->category = 'otomotif';
 
         return redirect()->route('admin.otomotif.index')->with('success', 'Otomotif created successfully.');
     }
@@ -164,6 +172,14 @@ class OtomotifController extends Controller
             'deskripsi_produk' => $request->deskripsi_produk,
             'harga' => $request->harga,
         ]);
+
+        $warehouse = Warehouse::findOrFail($id);
+        $warehouse->update([
+            'judul_produk' => $request->judul_produk,
+            'deskripsi_produk' => $request->deskripsi_produk,
+            'harga' => $request->harga,
+        ]);
+
 
         $spesifikasi = SpesifikasiOtomotif::where('otomotif_id', $otomotif->id)->first();
         $spesifikasi->update([
