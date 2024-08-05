@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Properti;
 use App\Models\SpesifikasiProperti;
 use App\Models\FotoProperti;
+use App\Models\dataWareHouse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -120,6 +121,21 @@ class PropertiController extends Controller
         $spesifikasi->sertifikat = $request->sertifikat;
         $spesifikasi->save();
 
+        $warehouse = new dataWareHouse();
+        $warehouse->id_properti = $properti->id;
+        $warehouse->id_spesifikasi_properti = $spesifikasi->id;
+        $warehouse->judul_produk = $properti->judul_produk;
+        $warehouse->deskripsi_produk = $properti->deskripsi_produk;
+        $warehouse->jenis_produk = 'properti';
+        $warehouse->subtype = $spesifikasi->jenis_properti;
+        $warehouse->kota = $spesifikasi->kota;
+        $warehouse->provinsi = $spesifikasi->provinsi;
+        $warehouse->luas_tanah = $spesifikasi->luas_tanah;
+        $warehouse->luas_bangunan = $spesifikasi->luas_bangunan;
+        $warehouse->kamar_tidur = $spesifikasi->jumlah_kamar_tidur;
+        $warehouse->kamar_mandi = $spesifikasi->jumlah_kamar_mandi;
+        $warehouse->save();
+
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
                 $filename = $file->hashName(); // Menghasilkan nama file acak unik
@@ -178,6 +194,20 @@ class PropertiController extends Controller
         $spesifikasi->fasilitas = $request->fasilitas;
         $spesifikasi->sertifikat = $request->sertifikat;
         $spesifikasi->save();
+
+        $warehouse = new dataWareHouse();
+        $warehouse->id_produk = $properti->id;
+        $warehouse->judul_produk = $properti->judul_produk;
+        $warehouse->deskripsi_produk = $properti->deskripsi_produk;
+        $warehouse->jenis_produk = 'properti';
+        $warehouse->subtype = $spesifikasi->jenis_properti;
+        $warehouse->kota = $spesifikasi->kota;
+        $warehouse->provisi = $spesifikasi->provisi;
+        $warehouse->luas_tanah = $spesifikasi->luas_tanah;
+        $warehouse->luas_bangunan = $spesifikasi->luas_bangunan;
+        $warehouse->kamar_tidur = $spesifikasi->jumlah_kamar_tidur;
+        $warehouse->kamar_mandi = $spesifikasi->jumlah_kamar_mandi;
+        $warehouse->save();
 
         if ($request->hasFile('foto')) {
             $foto_existing = $request->input('foto_existing', []);

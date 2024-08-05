@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'google_id' => null,
             'role' => 'admin',
+            'address' => 'alamat',
         ]);
 
         // Seeder ini akan membuat 10 user dengan KTP unik dan password urut
@@ -45,6 +46,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make($passwordBase . $i),
                 'google_id' => null,
                 'role' => 'customer',
+                'address' => 'alamat',
+
             ]);
         }
 

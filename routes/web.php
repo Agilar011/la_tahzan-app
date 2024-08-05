@@ -7,6 +7,7 @@ use App\Http\Controllers\UmrahController;
 use App\Http\Controllers\OtomotifController;
 use App\Http\Controllers\PropertiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SearchController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('welcome');
 
@@ -141,3 +142,6 @@ Route::middleware([
 
 Route::get('auth/google', [GoogleController::class, 'googlepage']);
 Route::get('auth/google/callback', [GoogleController::class, 'googlecallback']);
+
+Route::get('/search/results', [SearchController::class, 'search'])->name('search.results');
+

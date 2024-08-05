@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Otomotif;
 use App\Models\SpesifikasiOtomotif;
 use App\Models\FotoOtomotif;
+use App\Models\dataWareHouse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -114,6 +115,19 @@ class OtomotifController extends Controller
         $spesifikasi->stnk = $request->stnk;
         $spesifikasi->bpkb = $request->bpkb;
         $spesifikasi->save();
+
+        $warehouse = new dataWareHouse();
+        $warehouse->id_otomotif = $otomotif->id;
+        $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
+        $warehouse->judul_produk = $otomotif->judul_produk;
+        $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
+        $warehouse->jenis_produk = 'otomotif';
+        $warehouse->subtype = $spesifikasi->type;
+        $warehouse->cc = $spesifikasi->kapasitas_mesin;
+        // $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
+        $warehouse->brand = $spesifikasi->brand;
+        $warehouse->save();
+
 
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {

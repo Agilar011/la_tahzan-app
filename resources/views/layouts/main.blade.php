@@ -67,10 +67,17 @@
             </div>
 {{-- SearchBar --}}
             <div class="hidden sm:flex items-center w-full rounded-lg border border-black min-w-[300px] mx-4">
-                <input type="text" placeholder="Apa yang anda cari???..."
+                <form action="{{ route('search.results') }}" method="GET" class="flex w-full">
+                    <input type="text" name="query" placeholder="Apa yang anda cari???..." class="w-full px-4 py-2 rounded-l-lg border border-black">
+                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-lg border border-black">
+                        <i
+                        class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                {{-- <input type="text" placeholder="Apa yang anda cari???..."
                     class="w-full px-4 py-2 rounded-l-lg border border-black">
                 <button class="bg-gray-600 text-white px-4 py-2 rounded-r-lg border border-black"><i
-                        class="fa-solid fa-magnifying-glass"></i></button>
+                        class="fa-solid fa-magnifying-glass"></i></button> --}}
             </div>
 
             <div class="md:hidden">
