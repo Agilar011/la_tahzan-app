@@ -4,43 +4,44 @@
     <div class="container mx-auto sm:p-4 bg-gray-100 min-w-full">
         <div class="bg-white rounded-lg flex flex-col sm:p-2 lg:flex-row">
             <!-- Carousel -->
-            <!-- customer/otomotif.blade.php -->
             <div class="w-full lg:w-2/3">
                 <style>
                     .carousel-image {
-                        height: 600px;
-                        /* Adjust this value as needed */
+                        height: 600px; /* Adjust this value as needed */
                         object-fit: cover;
                     }
                 </style>
                 <div id="carouselExampleIndicators" class="carousel slide rounded-xl" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @if ($otomotif->fotos->isNotEmpty())
-                            <div class="carousel-item active">
-                                <img src="{{ asset('storage/foto_otomotif/' . $otomotif->fotos->first()->path) }}"
-                                    class="d-block w-100 img-fluid carousel-image" alt="Foto Otomotif">
-                            </div>
-                        @else
-                            <div class="carousel-item active">
-                                <img src="/path/to/default/image.jpg" class="d-block w-100 img-fluid carousel-image"
-                                    alt="Default Foto">
-                            </div>
-                        @endif
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="prev">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/img/produk otomotif 1.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/img/produk otomotif 2.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/img/produk otomotif 3.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/img/produk otomotif 3.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
             </div>
-
-
 
             <!-- Product Details Mobile-->
             <div class="w-full pt-5 sm:hidden lg:w-1/2 lg:pl-8 ">

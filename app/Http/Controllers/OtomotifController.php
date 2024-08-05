@@ -268,7 +268,7 @@ class OtomotifController extends Controller
     public function show($id)
     {
     $otomotif = Otomotif::with('fotos')->findOrFail($id);
-    return view('customer.otomotif', compact('otomotif'));
+    return view('customer.spesifikasi-otomotif', compact('otomotif'));
     }
 
 
