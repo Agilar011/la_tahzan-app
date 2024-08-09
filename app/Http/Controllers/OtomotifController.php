@@ -74,75 +74,83 @@ class OtomotifController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'judul_produk' => 'required|string|max:255',
-            'deskripsi_produk' => 'required',
-            'harga' => 'required|numeric',
-            'transmisi' => 'required|in:manual,matic',
-            'type' => 'required|string|max:255',
-            'subtype' => 'required|string|max:255',
-            'kilometer' => 'required|string|max:255',
-            'kapasitas_mesin' => 'required|string|max:255',
-            'tahun_pembuatan' => 'required|date',
-            'brand' => 'required|string|max:255',
-            'stnk' => 'required|in:ya,tidak',
-            'bpkb' => 'required|in:ya,tidak',
-            'foto.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+    $request->validate([
+        'judul_produk' => 'required|string|max:255',
+        'deskripsi_produk' => 'required',
+        'harga' => 'required|numeric',
+        'transmisi' => 'required|in:manual,matic',
+        'type' => 'required|string|max:255',
+        'subtype' => 'required|string|max:255',
+        'kilometer' => 'required|string|max:255',
+        'kapasitas_mesin' => 'required|string|max:255',
+        'tahun_pembuatan' => 'required|date',
+        'brand' => 'required|string|max:255',
+        'stnk' => 'required|in:ya,tidak',
+        'bpkb' => 'required|in:ya,tidak',
+        'foto.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    ]);
 
-        $otomotif = new Otomotif();
-        $otomotif->judul_produk = $request->judul_produk;
-        $otomotif->deskripsi_produk = $request->deskripsi_produk;
-        $otomotif->harga = $request->harga;
-        $otomotif->status_ads = 'pending';
-        $otomotif->status_payment = 'unpaid';
-        $otomotif->save();
+    $otomotif = new Otomotif();
+    $otomotif->judul_produk = $request->judul_produk;
+    $otomotif->deskripsi_produk = $request->deskripsi_produk;
+    $otomotif->harga = $request->harga;
+    $otomotif->status_ads = 'pending';
+    $otomotif->status_payment = 'unpaid';
+    $otomotif->save();
 
-        $spesifikasi = new SpesifikasiOtomotif();
-        $spesifikasi->otomotif_id = $otomotif->id;
-        $spesifikasi->user_id = Auth::id();
-        $spesifikasi->seller = Auth::user()->name;
-        $spesifikasi->phone = Auth::user()->phone;
-        $spesifikasi->address = Auth::user()->address;
-        $spesifikasi->status_seller = Auth::user()->status_seller;
-        $spesifikasi->transmisi = $request->transmisi;
-        $spesifikasi->type = $request->type;
-        $spesifikasi->subtype = $request->subtype;
-        $spesifikasi->kilometer = $request->kilometer;
-        $spesifikasi->kapasitas_mesin = $request->kapasitas_mesin;
-        $spesifikasi->tahun_pembuatan = $request->tahun_pembuatan;
-        $spesifikasi->brand = $request->brand;
-        $spesifikasi->stnk = $request->stnk;
-        $spesifikasi->bpkb = $request->bpkb;
-        $spesifikasi->save();
+    $spesifikasi = new SpesifikasiOtomotif();
+    $spesifikasi->otomotif_id = $otomotif->id;
+    $spesifikasi->user_id = Auth::id();
+    $spesifikasi->seller = Auth::user()->name;
+    $spesifikasi->phone = Auth::user()->phone;
+    $spesifikasi->address = Auth::user()->address;
+    $spesifikasi->status_seller = Auth::user()->status_seller;
+    $spesifikasi->transmisi = $request->transmisi;
+    $spesifikasi->type = $request->type;
+    $spesifikasi->subtype = $request->subtype;
+    $spesifikasi->kilometer = $request->kilometer;
+    $spesifikasi->kapasitas_mesin = $request->kapasitas_mesin;
+    $spesifikasi->tahun_pembuatan = $request->tahun_pembuatan;
+    $spesifikasi->brand = $request->brand;
+    $spesifikasi->stnk = $request->stnk;
+    $spesifikasi->bpkb = $request->bpkb;
+    $spesifikasi->save();
 
-        $warehouse = new dataWareHouse();
-        $warehouse->id_otomotif = $otomotif->id;
-        $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
-        $warehouse->judul_produk = $otomotif->judul_produk;
-        $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
-        $warehouse->jenis_produk = 'otomotif';
-        $warehouse->subtype = $spesifikasi->type;
-        $warehouse->cc = $spesifikasi->kapasitas_mesin;
-        // $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
-        $warehouse->brand = $spesifikasi->brand;
-        $warehouse->save();
+    $warehouse = new dataWareHouse();
+    $warehouse->id_otomotif = $otomotif->id;
+    $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
+    $warehouse->judul_produk = $otomotif->judul_produk;
+    $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
+    $warehouse->jenis_produk = 'otomotif';
+    $warehouse->subtype = $spesifikasi->type;
+    $warehouse->cc = $spesifikasi->kapasitas_mesin;
+    // $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
+    $warehouse->brand = $spesifikasi->brand;
+    // Default value for pathOto, will be updated if foto is present
+    $warehouse->pathOto = '';
 
+    if ($request->hasFile('foto')) {
+        foreach ($request->file('foto') as $index => $file) {
+            $filename = $file->hashName(); // Menghasilkan nama file acak unik
+            $file->storeAs('public/foto_otomotif', $filename); // Menyimpan file dengan nama yang dihasilkan
 
-        if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $file) {
-                $filename = $file->hashName(); // Menghasilkan nama file acak unik
-                $file->storeAs('public/foto_otomotif', $filename); // Menyimpan file dengan nama yang dihasilkan
+            $foto = new FotoOtomotif();
+            $foto->otomotif_id = $otomotif->id;
+            $foto->path = $filename; // Menyimpan nama file saja di database
+            $foto->save();
 
-                $foto = new FotoOtomotif();
-                $foto->otomotif_id = $otomotif->id;
-                $foto->path = $filename; // Menyimpan nama file saja di database
-                $foto->save();
+            // Set pathOto for the first photo
+            if ($index == 0) {
+                $warehouse->pathOto = $filename;
             }
         }
-
-        return redirect()->route('admin.otomotif.index')->with('success', 'Otomotif created successfully.');
     }
+
+    $warehouse->save();
+
+    return redirect()->route('admin.otomotif.index')->with('success', 'Otomotif created successfully.');
+    }
+
 
     public function edit($id)
     {
@@ -251,23 +259,26 @@ class OtomotifController extends Controller
 
     public function spesifikasi($id)
     {
-        $otomotif = Otomotif::with('fotos') // Make sure fotos relationship is loaded
-            ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
-            ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
-            ->findOrFail($id);
+    $otomotif = Otomotif::with('fotos') // Pastikan fotos di-load
+        ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+        ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
+        ->findOrFail($id);
 
-        // Fetch the number of products and seller join date
-        $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
-        $otomotif->sellerBergabung = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)
-                ->min('created_at');
-        $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
+    // Hitung jumlah produk dan tanggal bergabung seller
+    $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
+    $otomotif->sellerBergabung = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)
+        ->min('created_at');
+    $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
 
-        return view('customer.spesifikasi-otomotif', compact('otomotif'));
+    return view('customer.spesifikasi-otomotif', compact('otomotif'));
     }
+
 
     public function show($id)
     {
     $otomotif = Otomotif::with('fotos')->findOrFail($id);
+    // Debugging
+    dd($otomotif->fotos);
     return view('customer.spesifikasi-otomotif', compact('otomotif'));
     }
 

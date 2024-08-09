@@ -13,24 +13,18 @@
                 </style>
                 <div id="carouselExampleIndicators" class="carousel slide rounded-xl" data-bs-ride="carousel">
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        @foreach ($otomotif->fotos as $index => $foto)
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}"
+                                class="{{ $index == 0 ? 'active' : '' }}" aria-current="true"
+                                aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
                     </div>
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="/img/produk otomotif 1.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="/img/produk otomotif 2.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="/img/produk otomotif 3.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="/img/produk otomotif 3.webp" class="d-block w-100 img-fluid carousel-image" alt="...">
-                        </div>
+                        @foreach ($otomotif->fotos as $index => $foto)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/foto_otomotif/' . $foto->path) }}" class="d-block w-100 img-fluid carousel-image" alt="...">
+                            </div>
+                        @endforeach
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -43,7 +37,7 @@
                 </div>
             </div>
 
-            <!-- Product Details Mobile-->
+            <!-- Product Details Mobile -->
             <div class="w-full pt-5 sm:hidden lg:w-1/2 lg:pl-8 ">
                 <p class="text-3xl text-gray-900 mb-4 font-black">Rp.
                     {{ number_format($otomotif->harga, 0, ',', '.') }}</p>
@@ -138,7 +132,6 @@
         {{-- Section Seller --}}
         <div class="flex bg-white w-full p-5 rounded-lg mt-5">
             <div class="flex w-full justify-between divide-x-4">
-
                 <!-- Div untuk informasi Seller -->
                 <div class="flex items-center text-center ">
                     <i class="fa-solid fa-user fa-2xl" style="color: #000000;"></i>

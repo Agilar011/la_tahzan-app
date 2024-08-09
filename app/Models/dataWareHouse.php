@@ -24,11 +24,13 @@ class dataWareHouse extends Model
         'maskapai',
         'hotel',
         'durasi',
+        'pathUmrah',
         //otomotif
         'subtype', //ngerangkap sama properti
         'cc',
         'tahun_pembuatan',
         'brand',
+        'pathOto',
         //property
         'kota',
         'provinsi',
@@ -36,6 +38,7 @@ class dataWareHouse extends Model
         'luas_bangunan',
         'kamar_tidur',
         'kamar_mandi',
+        'pathProp',
     ];
 
     public function umrah()

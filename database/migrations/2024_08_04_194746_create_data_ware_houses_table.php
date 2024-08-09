@@ -29,11 +29,13 @@ class CreateDataWareHousesTable extends Migration
             $table->string('maskapai')->nullable();
             $table->string('hotel')->nullable();
             $table->string('durasi')->nullable();
+            $table->string('pathUmrah')->nullable();
             // otomotif
             $table->string('subtype')->nullable(); // juga digunakan untuk properti
             $table->integer('cc')->nullable();
             $table->integer('tahun_pembuatan')->nullable();
             $table->string('brand')->nullable();
+            $table->string('pathOto')->nullable();
             // property
             $table->string('kota')->nullable();
             $table->string('provinsi')->nullable();
@@ -41,6 +43,7 @@ class CreateDataWareHousesTable extends Migration
             $table->integer('luas_bangunan')->nullable();
             $table->integer('kamar_tidur')->nullable();
             $table->integer('kamar_mandi')->nullable();
+            $table->string('pathProp')->nullable();
             $table->timestamps(); // Untuk kolom created_at dan updated_at
         });
     }

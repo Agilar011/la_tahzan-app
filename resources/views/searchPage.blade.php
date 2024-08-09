@@ -100,7 +100,8 @@
                         <div class="relative flex flex-col bg-white shadow-lg rounded-lg overflow-hidden">
                             <!-- Badge for Star Seller or VIP -->
                             @if ($item->otomotif->status_seller == '2Star Seller')
-                                <div class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
+                                <div
+                                    class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -110,7 +111,8 @@
                                     <span>Star Seller</span>
                                 </div>
                             @elseif ($item->otomotif->status_seller == '1VIP')
-                                <div class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
+                                <div
+                                    class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -120,19 +122,21 @@
                                 </div>
                             @endif
 
-                            <a href="{{ route('otomotif.spesifikasi', $item->id) }}">
-                                {{-- @foreach ($item->fotos as $foto)
-                                    <img src="{{ asset('storage/foto_otomotif/' . $foto->path) }}"
-                                        alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
-                                    @break
-                                @endforeach --}}
+                            <a href="{{ route('otomotif.spesifikasi', $item->id_otomotif) }}">
+
+                                <img src="{{ asset('storage/foto_otomotif/' . $item->pathOto) }}"
+                                    alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
+
                                 <div class="p-6 relative">
-                                    <h2 class="font-black text-xl">Rp. {{ number_format($item->otomotif->harga, 0, ',', '.') }}</h2>
+                                    <h2 class="font-black text-xl">Rp.
+                                        {{ number_format($item->otomotif->harga, 0, ',', '.') }}</h2>
                                     <p class="mt-2 text-lg">{{ Str::limit($item->judul_produk, 32, '...') }}</p>
-                                    <p class="mt-2 text-lg">{{ date('Y', strtotime($item->spesifikasiotomotif->tahun_pembuatan)) }}
+                                    <p class="mt-2 text-lg">
+                                        {{ date('Y', strtotime($item->spesifikasiotomotif->tahun_pembuatan)) }}
                                     </p>
                                     <div class="absolute bottom-4 right-4 flex items-center text-gray-500">
-                                        <img src="{{ asset('logooto/mitsubishi.png') }}" alt="Logo" class="w-4 h-4 mr-1">
+                                        <img src="{{ asset('logooto/mitsubishi.png') }}" alt="Logo"
+                                            class="w-4 h-4 mr-1">
                                         <p>{{ $item->spesifikasiotomotif->brand }}</p>
                                     </div>
                                 </div>
@@ -142,7 +146,8 @@
                         <div class="relative flex flex-col bg-white shadow-lg rounded-sm overflow-hidden">
                             <!-- Badge for Star Seller or VIP -->
                             @if ($item->spesifikasiproperti->status_seller == 'Star Seller')
-                                <div class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
+                                <div
+                                    class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -151,9 +156,9 @@
                                     </svg>
                                     <span>Star Seller</span>
                                 </div>
-                        </div>
                             @elseif ($item->properti->status_seller == 'VIP')
-                                <div class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
+                                <div
+                                    class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -164,13 +169,13 @@
                             @endif
 
                             <a href="{{ route('properti.spesifikasi', $item->id_properti) }}">
-                                {{-- @foreach ($item->fotos as $foto)
-                                    <img src="{{ asset('storage/foto_properti/' . $foto->path) }}"
+                                {{-- @if ($item->fotos->isNotEmpty())
+                                    <img src="{{ asset('storage/foto_properti/' . $item->fotos->first()->path) }}"
                                         alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
-                                    @break
-                                @endforeach --}}
+                                @endif --}}
                                 <div class="p-6">
-                                    <h2 class="font-black text-xl">Rp. {{ number_format($item->properti->harga, 0, ',', '.') }}</h2>
+                                    <h2 class="font-black text-xl">Rp.
+                                        {{ number_format($item->properti->harga, 0, ',', '.') }}</h2>
                                     <p class="mt-2 text-lg">{{ $item->judul_produk }}</p>
                                     <div class="flex items-center text-gray-500 mt-2">
                                         <img src="{{ asset('loc.png') }}" alt="Logo" class="h-4 mr-1">
@@ -182,12 +187,12 @@
                         </div>
                     @else
                         <a href="{{ route('umrah.spesifikasi', $item->id) }}">
-                            <div class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-4 w-full md:w-1/3 lg:w-1/4">
-                                @foreach ($item->fotos as $foto)
-                                    <img src="{{ asset('storage/foto_umrah/' . $foto->path) }}"
+                            <div
+                                class="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden m-4 w-full md:w-1/3 lg:w-1/4">
+                                {{-- @if ($item->fotos->isNotEmpty())
+                                    <img src="{{ asset('storage/foto_umrah/' . $item->fotos->first()->path) }}"
                                         alt="{{ $item->judul_produk }}" class="w-full h-72 object-cover">
-                                    @break
-                                @endforeach
+                                @endif --}}
                                 <div class="p-6">
                                     <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
                                     <p class="mt-2 text-xl">{{ $item->judul_produk }}</p>

@@ -16,7 +16,7 @@
             justify-content: center;
             overflow: hidden;
             /* background-color: #fff;
-                                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+                                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
             border-radius: 10px;
         }
 
@@ -177,7 +177,7 @@
                         <p class="mt-2 text-gray-500 text-xl">{{ $item->deskripsi_produk }}</p>
                     </div>
             </a>
-                    </div>
+    </div>
     @endforeach
 </div>
 <div class="flex flex-col items-center justify-center mt-8">
@@ -236,7 +236,16 @@
                     <p class="mt-2 text-lg">{{ Str::limit($item->judul_produk, 32, '...') }}</p>
                     <p class="mt-2 text-lg">{{ date('Y', strtotime($item->spesifikasi->tahun_pembuatan)) }}</p>
                     <div class="absolute bottom-4 right-4 flex items-center text-gray-500">
-                        <img src="{{ asset('logooto/mitsubishi.png') }}" alt="Logo" class="w-4 h-4 mr-1">
+                        @php
+                            $logoPath = 'logoOto/' . strtolower($item->spesifikasi->brand) . '.png';
+                            if ($item->spesifikasi->brand == 'Honda') {
+                                $logoPath =
+                                    $item->spesifikasi->type == 'Motor'
+                                        ? 'logoOto/honda_motor.png'
+                                        : 'logoOto/honda.png';
+                            }
+                        @endphp
+                        <img src="{{ asset($logoPath) }}" alt="Logo" class="w-4 h-4 mr-1">
                         <p>{{ $item->spesifikasi->brand }}</p>
                     </div>
                 </div>
