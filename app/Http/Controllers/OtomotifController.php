@@ -116,18 +116,18 @@ class OtomotifController extends Controller
     $spesifikasi->bpkb = $request->bpkb;
     $spesifikasi->save();
 
-    $warehouse = new dataWareHouse();
-    $warehouse->id_otomotif = $otomotif->id;
-    $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
-    $warehouse->judul_produk = $otomotif->judul_produk;
-    $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
-    $warehouse->jenis_produk = 'otomotif';
-    $warehouse->subtype = $spesifikasi->type;
-    $warehouse->cc = $spesifikasi->kapasitas_mesin;
-    // $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
-    $warehouse->brand = $spesifikasi->brand;
-    // Default value for pathOto, will be updated if foto is present
-    $warehouse->pathOto = '';
+        $warehouse = new dataWareHouse();
+        $warehouse->otomotif_id = $otomotif->id;
+        $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
+        $warehouse->judul_produk = $otomotif->judul_produk;
+        $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
+        $warehouse->jenis_produk = 'otomotif';
+        $warehouse->subtype = $spesifikasi->type;
+        $warehouse->cc = $spesifikasi->kapasitas_mesin;
+        $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
+        $warehouse->brand = $spesifikasi->brand;
+        $warehouse->save();
+
 
     if ($request->hasFile('foto')) {
         foreach ($request->file('foto') as $index => $file) {
@@ -196,6 +196,16 @@ class OtomotifController extends Controller
             'bpkb' => $request->bpkb,
         ]);
 
+        $warehouse = dataWareHouse::where('otomotif_id', $otomotif->id)->first();
+        $warehouse->update([
+            'judul_produk' => $otomotif->judul_produk,
+            'deskripsi_produk' => $otomotif->deskripsi_produk,
+            'subtype' => $spesifikasi->type,
+            'cc' => $spesifikasi->kapasitas_mesin,
+            'tahun_pembuatan' => $spesifikasi->tahun_pembuatan,
+            'brand' => $spesifikasi->brand,
+        ]);
+
         if ($request->hasFile('foto')) {
             $foto_existing = $request->input('foto_existing', []);
             foreach ($request->file('foto') as $key => $file) {
@@ -236,6 +246,9 @@ class OtomotifController extends Controller
         // Hapus spesifikasi yang terkait
         SpesifikasiOtomotif::where('otomotif_id', $id)->delete();
 
+        // Hapus warehouse yang terkait
+        dataWareHouse::where('id_otomotif', $id)->delete();
+
         // Hapus data otomotif
         $otomotif->delete();
 
@@ -259,10 +272,11 @@ class OtomotifController extends Controller
 
     public function spesifikasi($id)
     {
-    $otomotif = Otomotif::with('fotos') // Pastikan fotos di-load
-        ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
-        ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
-        ->findOrFail($id);
+        // dd($id);
+        $otomotif = Otomotif::with('fotos') // Make sure fotos relationship is loaded
+            ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+            ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
+            ->findOrFail($id);
 
     // Hitung jumlah produk dan tanggal bergabung seller
     $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();

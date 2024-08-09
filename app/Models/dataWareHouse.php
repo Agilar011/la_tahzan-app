@@ -10,9 +10,9 @@ class dataWareHouse extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_otomotif',
-        'id_properti',
-        'id_umrah',
+        'otomotif_id',
+        'properti_id',
+        'umrah_id',
         'id_spesifikasi_umrah',
         'id_spesifikasi_otomotif',
         'id_spesifikasi_properti',
@@ -20,7 +20,7 @@ class dataWareHouse extends Model
         'deskripsi_produk',
         'jenis_produk',  //category
         //umrah
-        'agen',
+        'agen_travel',
         'maskapai',
         'hotel',
         'durasi',

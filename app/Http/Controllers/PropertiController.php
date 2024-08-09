@@ -122,7 +122,7 @@ class PropertiController extends Controller
         $spesifikasi->save();
 
         $warehouse = new dataWareHouse();
-        $warehouse->id_properti = $properti->id;
+        $warehouse->properti_id = $properti->id;
         $warehouse->id_spesifikasi_properti = $spesifikasi->id;
         $warehouse->judul_produk = $properti->judul_produk;
         $warehouse->deskripsi_produk = $properti->deskripsi_produk;
@@ -196,7 +196,7 @@ class PropertiController extends Controller
         $spesifikasi->save();
 
         $warehouse = new dataWareHouse();
-        $warehouse->id_produk = $properti->id;
+        $warehouse->properti_id = $properti->id;
         $warehouse->judul_produk = $properti->judul_produk;
         $warehouse->deskripsi_produk = $properti->deskripsi_produk;
         $warehouse->jenis_produk = 'properti';
@@ -248,6 +248,9 @@ class PropertiController extends Controller
 
         // Hapus spesifikasi yang terkait
         SpesifikasiProperti::where('properti_id', $id)->delete();
+
+        // Hapus warehouse yang terkait
+        dataWareHouse::where('properti_id', $id)->delete();
 
         // Hapus data properti
         $properti->delete();

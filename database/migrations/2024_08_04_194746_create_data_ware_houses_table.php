@@ -15,9 +15,9 @@ class CreateDataWareHousesTable extends Migration
     {
         Schema::create('data_ware_houses', function (Blueprint $table) {
             $table->id();
-            $table->string('id_otomotif')->nullable();
-            $table->string('id_properti')->nullable();
-            $table->string('id_umrah')->nullable();
+            $table->string('otomotif_id')->nullable();
+            $table->string('properti_id')->nullable();
+            $table->string('umrah_id')->nullable();
             $table->string('id_spesifikasi_umrah')->nullable();
             $table->string('id_spesifikasi_otomotif')->nullable();
             $table->string('id_spesifikasi_properti')->nullable();
@@ -25,7 +25,7 @@ class CreateDataWareHousesTable extends Migration
             $table->string('deskripsi_produk')->nullable();
             $table->string('jenis_produk')->nullable();  // category
             // umrah
-            $table->string('agen')->nullable();
+            $table->string('agen_travel')->nullable();
             $table->string('maskapai')->nullable();
             $table->string('hotel')->nullable();
             $table->string('durasi')->nullable();
@@ -33,7 +33,7 @@ class CreateDataWareHousesTable extends Migration
             // otomotif
             $table->string('subtype')->nullable(); // juga digunakan untuk properti
             $table->integer('cc')->nullable();
-            $table->integer('tahun_pembuatan')->nullable();
+            $table->date('tahun_pembuatan')->nullable();
             $table->string('brand')->nullable();
             $table->string('pathOto')->nullable();
             // property

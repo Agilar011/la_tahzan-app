@@ -104,6 +104,21 @@ class UmrahController extends Controller
             'durasi' => $request->durasi
         ]);
 
+        $warehouse = new dataWareHouse();
+        $warehouse->umrah_id = $umrah->id;
+        $warehouse->id_spesifikasi_umrah = $spesifikasi->id;
+        $warehouse->judul_produk = $umrah->judul_produk;
+        $warehouse->deskripsi_produk = $umrah->deskripsi_produk;
+        $warehouse->jenis_produk = 'umrah';
+        $warehouse->subtype = $spesifikasi->jenis_umrah;
+        $warehouse->kota = $spesifikasi->kota;
+        $warehouse->provinsi = $spesifikasi->provinsi;
+        $warehouse->luas_tanah = $spesifikasi->luas_tanah;
+        $warehouse->luas_bangunan = $spesifikasi->luas_bangunan;
+        $warehouse->kamar_tidur = $spesifikasi->jumlah_kamar_tidur;
+        $warehouse->kamar_mandi = $spesifikasi->jumlah_kamar_mandi;
+        $warehouse->save();
+
         // Simpan data ke tabel foto_umrah
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
@@ -161,6 +176,18 @@ class UmrahController extends Controller
             'durasi' => $request->durasi
         ]);
 
+        $warehouse = dataWareHouse::where('umrah_id', $umrah->id)->first();
+        $warehouse->update([
+            'agen_travel' => $umrah->judul_produk,
+            'nomor_telefon_agen' => $umrah->deskripsi_produk,
+            'maskapai' => $spesifikasi->type,
+            'hotel' => $spesifikasi->kapasitas_mesin,
+            'tanggal_keberangkatan' => $spesifikasi->tahun_pembuatan,
+            'durasi' => $spesifikasi->brand,
+        ]);
+
+
+
         // Update data di tabel foto_umrah jika ada file baru yang diupload
         if ($request->hasFile('foto')) {
             $foto_existing = $request->input('foto_existing', []);
@@ -202,7 +229,7 @@ class UmrahController extends Controller
         // Hapus spesifikasi yang terkait
         SpesifikasiUmrah::where('umrah_id', $id)->delete();
 
-        // Hapus data otomotif
+        // Hapus data umrah
         $umrah->delete();
 
         return response()->json(['success' => true]);
