@@ -116,18 +116,19 @@ class OtomotifController extends Controller
     $spesifikasi->bpkb = $request->bpkb;
     $spesifikasi->save();
 
-        $warehouse = new dataWareHouse();
-        $warehouse->otomotif_id = $otomotif->id;
-        $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
-        $warehouse->judul_produk = $otomotif->judul_produk;
-        $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
-        $warehouse->jenis_produk = 'otomotif';
-        $warehouse->subtype = $spesifikasi->type;
-        $warehouse->cc = $spesifikasi->kapasitas_mesin;
-        $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
-        $warehouse->brand = $spesifikasi->brand;
-        $warehouse->save();
-
+    $warehouse = new dataWareHouse();
+    $warehouse->id_otomotif = $otomotif->id;
+    $warehouse->id_spesifikasi_otomotif = $spesifikasi->id;
+    $warehouse->judul_produk = $otomotif->judul_produk;
+    $warehouse->deskripsi_produk = $otomotif->deskripsi_produk;
+    $warehouse->jenis_produk = 'otomotif';
+    $warehouse->subtype = $spesifikasi->type;
+    $warehouse->cc = $spesifikasi->kapasitas_mesin;
+    // $warehouse->tahun_pembuatan = $spesifikasi->tahun_pembuatan;
+    $warehouse->brand = $spesifikasi->brand;
+    // Default value for pathOto, will be updated if foto is present
+    $warehouse->pathOto = '';
+    $warehouse->status_seller = Auth::user()->status_seller;
 
     if ($request->hasFile('foto')) {
         foreach ($request->file('foto') as $index => $file) {
@@ -272,11 +273,11 @@ class OtomotifController extends Controller
 
     public function spesifikasi($id)
     {
-        // dd($id);
-        $otomotif = Otomotif::with('fotos') // Make sure fotos relationship is loaded
-            ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
-            ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
-            ->findOrFail($id);
+
+    $otomotif = Otomotif::with('fotos') // Pastikan fotos di-load
+        ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+        ->join('users', 'spesifikasi_otomotif.user_id', '=', 'users.id')
+        ->findOrFail($id);
 
     // Hitung jumlah produk dan tanggal bergabung seller
     $otomotif->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
@@ -284,7 +285,19 @@ class OtomotifController extends Controller
         ->min('created_at');
     $otomotif->sellerBergabung = (new DateTime($otomotif->sellerBergabung))->format('d F Y');
 
-    return view('customer.spesifikasi-otomotif', compact('otomotif'));
+
+
+    $photo = Otomotif::with('fotos') // Pastikan fotos di-load
+        ->join('spesifikasi_otomotif', 'otomotif.id', '=', 'spesifikasi_otomotif.otomotif_id')
+        ->findOrFail($id);
+
+    // Hitung jumlah produk dan tanggal bergabung seller
+    $photo->jumlahProduk = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)->count();
+    $photo->sellerBergabung = SpesifikasiOtomotif::where('user_id', $otomotif->user_id)
+        ->min('created_at');
+    $photo->sellerBergabung = (new DateTime($otomotif->created_at))->format('d F Y');
+
+    return view('customer.spesifikasi-otomotif', compact('otomotif', 'photo'));
     }
 
 
@@ -294,7 +307,7 @@ class OtomotifController extends Controller
     // Debugging
     dd($otomotif->fotos);
     return view('customer.spesifikasi-otomotif', compact('otomotif'));
-    }
+}
 
 
 

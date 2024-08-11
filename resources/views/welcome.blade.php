@@ -5,31 +5,17 @@
     <style>
         .carousel-item {
             display: none;
-            /* height: 100%; */
             border-radius: 10px;
         }
 
         .carousel-container {
-            height: 60vh;
+            height: 50vh;
+            /* Menyesuaikan 50% dari tinggi viewport */
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* background-color: #fff;
-                                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
             border-radius: 10px;
-        }
-
-        .carousel-item {
-            display: none;
-            width: auto;
-            height: 100%;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .carousel-item.active {
-            display: block;
         }
 
         .carousel-item.active {
@@ -53,55 +39,50 @@
             padding: 10px;
             cursor: pointer;
         }
+
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            /* Mengatur tinggi gambar secara otomatis */
+            max-height: 640px;
+            /* Batas maksimum tinggi */
+            object-fit: cover;
+            /* Agar gambar sesuai dengan area */
+        }
     </style>
 
-    <div class="carousel-container min-h-full">
-        <img src="/img/produk otomotif 1.webp" alt="Placeholder Image 1" class="carousel-item active">
-        <img src="/img/produk otomotif 2.webp" alt="Placeholder Image 2" class="carousel-item">
-        <img src="/img/produk otomotif 3.webp" alt="Placeholder Image 3" class="carousel-item">
-        <img src="/img/produk otomotif 4.webp" alt="Placeholder Image 4" class="carousel-item">
-        <div class="button-container">
-            <button class="prev" id="prev">&#10094;</button>
-            <button class="next" id="next">&#10095;</button>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
         </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/img/car5.jpg" class="d-block w-100" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img src="/img/car6.jpg" class="d-block w-100" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img src="/img/car7.jpg" class="d-block w-100" alt="Third slide">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const carouselItems = document.querySelectorAll('.carousel-item');
-            const prevButton = document.getElementById('prev');
-            const nextButton = document.getElementById('next');
-            let currentIndex = 0;
-
-            function updateCarousel() {
-                carouselItems.forEach((item, index) => {
-                    item.classList.toggle('active', index === currentIndex);
-                });
-                console.log(`updateCarousel called. Current Index: ${currentIndex}`);
-            }
-
-            function showNextImage() {
-                console.log("showNextImage called. Current Index:", currentIndex);
-                currentIndex = (currentIndex + 1) % carouselItems.length;
-                updateCarousel();
-                console.log("Next Image Shown. Updated Current Index:", currentIndex);
-            }
-
-            function showPrevImage() {
-                console.log("showPrevImage called. Current Index:", currentIndex);
-                currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-                updateCarousel();
-                console.log("Previous Image Shown. Updated Current Index:", currentIndex);
-            }
-
-            prevButton.addEventListener('click', showPrevImage);
-            nextButton.addEventListener('click', showNextImage);
-
-            setInterval(showNextImage, 5000); // Change image every 5 seconds
-
-            updateCarousel();
-        });
-    </script>
 
 
     {{-- Section 3 Product --}}
@@ -174,7 +155,7 @@
                     <div class="p-6">
                         <h2 class="font-black text-xl">Rp. {{ number_format($item->harga, 0, ',', '.') }}</h2>
                         <p class="mt-2 text-xl">{{ $item->judul_produk }}</p>
-                        <p class="mt-2 text-gray-500 text-xl">{{ $item->deskripsi_produk }}</p>
+                        <p class="mt-2 text-gray-500 text-xl">{{ $item->spesifikasi->agen_travel }}</p>
                     </div>
             </a>
     </div>
@@ -280,7 +261,7 @@
     @foreach ($properti as $item)
         <div class="relative flex flex-col bg-white shadow-lg rounded-sm overflow-hidden">
             <!-- Badge for Star Seller or VIP -->
-            @if ($item->spesifikasi->status_seller == 'Star Seller')
+            @if ($item->spesifikasi->status_seller == '2Star Seller')
                 <div class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -290,7 +271,7 @@
                     </svg>
                     <span>Star Seller</span>
                 </div>
-            @elseif ($item->spesifikasi->status_seller == 'VIP')
+            @elseif ($item->spesifikasi->status_seller == '1VIP')
                 <div class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">

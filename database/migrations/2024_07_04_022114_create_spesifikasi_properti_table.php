@@ -18,6 +18,7 @@ class CreateSpesifikasiPropertiTable extends Migration
             $table->string('jenis_properti');
             $table->string('luas_tanah');
             $table->string('seller');
+            $table->string('status_seller');
             $table->string('address');
             $table->string('phone');
             $table->string('luas_bangunan')->nullable();

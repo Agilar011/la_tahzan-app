@@ -5,83 +5,35 @@
         <div class="bg-white rounded-lg flex flex-col sm:p-2 lg:flex-row">
             <!-- Carousel -->
             <div class="w-full lg:w-2/3">
-                <div class="w-full grid gap-y-2">
-                    {{-- Main Image --}}
-                    <div class="hidden sm:block rounded-xl">
-                        <img src="/img/produk properti 1.webp" alt="Gambar Utama" id="mainImage"
-                            class="w-full h-96 object-cover rounded-xl">
-                        <div class="hidden flex-col gap-x-2 mt-2 justify-center xl:flex sm:flex-row sm:flex-wrap">
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 1.webp" alt="Placeholder Image 1"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 2.webp" alt="Placeholder Image 2"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 3.webp" alt="Placeholder Image 3"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 4.webp" alt="Placeholder Image 4"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 5.webp" alt="Placeholder Image 5"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                            <div class="w-full sm:w-[15%]">
-                                <img src="/img/produk properti 6.webp" alt="Placeholder Image 6"
-                                    class="w-full h-40 object-cover thumbnail rounded-lg">
-                            </div>
-                        </div>
+                <style>
+                    .carousel-image {
+                        height: 600px; /* Adjust this value as needed */
+                        object-fit: cover;
+                    }
+                </style>
+                <div id="carouselExampleIndicators" class="carousel slide rounded-xl" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @foreach ($photo->fotos as $index => $foto)
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}"
+                                class="{{ $index == 0 ? 'active' : '' }}" aria-current="true"
+                                aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
                     </div>
-                    {{-- Mobile Carousel --}}
-                    <div class="block sm:hidden">
-                        <div class="carousel-container min-h-full sm:hidden">
-                            <img src="/img/produk properti 1.webp" alt="Placeholder Image 1" class="carousel-item active">
-                            <img src="/img/produk properti 2.webp" alt="Placeholder Image 2" class="carousel-item">
-                            <img src="/img/produk properti 3.webp" alt="Placeholder Image 3" class="carousel-item">
-                            <img src="/img/produk properti 4.webp" alt="Placeholder Image 4" class="carousel-item">
-                            <div class="button-container">
-                                <button class="prev" id="prev">&#10094;</button>
-                                <button class="next" id="next">&#10095;</button>
+                    <div class="carousel-inner">
+                        @foreach ($photo->fotos as $index => $foto)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/foto_properti/' . $foto->path) }}" class="d-block w-100 img-fluid carousel-image" alt="...">
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const carouselItems = document.querySelectorAll('.carousel-item');
-                            const prevButton = document.getElementById('prev');
-                            const nextButton = document.getElementById('next');
-                            let currentIndex = 0;
-
-                            function updateCarousel() {
-                                carouselItems.forEach((item, index) => {
-                                    item.classList.toggle('active', index === currentIndex);
-                                });
-                            }
-
-                            function showNextImage() {
-                                currentIndex = (currentIndex + 1) % carouselItems.length;
-                                updateCarousel();
-                            }
-
-                            function showPrevImage() {
-                                currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-                                updateCarousel();
-                            }
-
-                            prevButton.addEventListener('click', showPrevImage);
-                            nextButton.addEventListener('click', showNextImage);
-
-                            setInterval(showNextImage, 5000); // Change image every 5 seconds
-
-                            updateCarousel();
-                        });
-                    </script>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
 
@@ -111,11 +63,11 @@
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Land Area</td>
-                            <td class="py-2">{{ $properti->luas_tanah }}</td>
+                            <td class="py-2">{{ $properti->luas_tanah }}m²</td>
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Building Area</td>
-                            <td class="py-2">{{ $properti->luas_bangunan }}</td>
+                            <td class="py-2">{{ $properti->luas_bangunan }}m²</td>
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Number of Bedrooms</td>
@@ -128,10 +80,6 @@
                         <tr class="border-t">
                             <td class="py-2 font-bold">Certificate</td>
                             <td class="py-2">{{ $properti->sertifikat }}</td>
-                        </tr>
-                        <tr class="border-t">
-                            <td class="py-2 font-bold">Facilities</td>
-                            <td class="py-2">{{ $properti->fasilitas }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -170,11 +118,11 @@
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Land Area</td>
-                            <td class="py-2">{{ $properti->luas_tanah }}</td>
+                            <td class="py-2">{{ $properti->luas_tanah }}m²</td>
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Building Area</td>
-                            <td class="py-2">{{ $properti->luas_bangunan }}</td>
+                            <td class="py-2">{{ $properti->luas_bangunan }}m²</td>
                         </tr>
                         <tr class="border-t">
                             <td class="py-2 font-bold">Number of Bedrooms</td>
@@ -187,10 +135,6 @@
                         <tr class="border-t">
                             <td class="py-2 font-bold">Certificate</td>
                             <td class="py-2">{{ $properti->sertifikat }}</td>
-                        </tr>
-                        <tr class="border-t">
-                            <td class="py-2 font-bold">Facilities</td>
-                            <td class="py-2">{{ $properti->fasilitas }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -206,10 +150,9 @@
         </div>
     </div>
 
-    {{-- Section Seller --}}
-    <div class="flex bg-white w-full p-5 rounded-lg mt-5">
+     {{-- Section Seller --}}
+     <div class="flex bg-white w-full p-5 rounded-lg mt-5">
         <div class="flex w-full justify-between divide-x-4">
-
             <!-- Div untuk informasi Seller -->
             <div class="flex items-center text-center ">
                 <i class="fa-solid fa-user fa-2xl" style="color: #000000;"></i>
@@ -228,13 +171,18 @@
                 </div>
 
                 <!-- Div untuk lama bergabung -->
-                <div class="flex text-center items-center w-full px-2">
-                    <i class="fa-solid fa-hourglass-start fa-2xl"></i>
+                <div class="flex text-center items-center w-full">
+                    <i class="fa-solid fa-calendar-plus fa-2xl" style="color: #FFABE1;"></i>
                     <div class="items-center justify-center">
                         <p class="ml-2 font-bold">{{ $properti->sellerBergabung }}</p>
-                        <p class="mt-2 mx-2">Lama Bergabung</p>
+                        <p class="mt-2 mx-2">Tahun Bergabung</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Div untuk badge seller -->
+            <div class="flex justify-center items-center w-1/3 lg:w-1/4">
+                <img src="{{ asset('img/Group 119.png') }}" alt="Trusted" class="h-16">
             </div>
         </div>
     </div>

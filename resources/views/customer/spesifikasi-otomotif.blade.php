@@ -13,14 +13,14 @@
                 </style>
                 <div id="carouselExampleIndicators" class="carousel slide rounded-xl" data-bs-ride="carousel">
                     <div class="carousel-indicators">
-                        @foreach ($otomotif->fotos as $index => $foto)
+                        @foreach ($photo->fotos as $index => $foto)
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $index }}"
                                 class="{{ $index == 0 ? 'active' : '' }}" aria-current="true"
                                 aria-label="Slide {{ $index + 1 }}"></button>
                         @endforeach
                     </div>
                     <div class="carousel-inner">
-                        @foreach ($otomotif->fotos as $index => $foto)
+                        @foreach ($photo->fotos as $index => $foto)
                             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                                 <img src="{{ asset('storage/foto_otomotif/' . $foto->path) }}" class="d-block w-100 img-fluid carousel-image" alt="...">
                             </div>
@@ -153,7 +153,7 @@
                     <div class="flex text-center items-center w-full">
                         <i class="fa-solid fa-calendar-plus fa-2xl" style="color: #FFABE1;"></i>
                         <div class="items-center justify-center">
-                            <p class="ml-2 font-bold">{{ $otomotif->tahunBergabung }}</p>
+                            <p class="ml-2 font-bold">{{ $otomotif->sellerBergabung }}</p>
                             <p class="mt-2 mx-2">Tahun Bergabung</p>
                         </div>
                     </div>

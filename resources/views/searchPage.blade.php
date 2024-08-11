@@ -145,7 +145,7 @@
                     @elseif ($item->jenis_produk == 'properti')
                         <div class="relative flex flex-col bg-white shadow-lg rounded-sm overflow-hidden">
                             <!-- Badge for Star Seller or VIP -->
-                            @if ($item->spesifikasiproperti->status_seller == 'Star Seller')
+                            @if ($item->spesifikasiproperti->status_seller == '2Star Seller')
                                 <div
                                     class="absolute top-0 right-0 bg-orange-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -156,7 +156,7 @@
                                     </svg>
                                     <span>Star Seller</span>
                                 </div>
-                            @elseif ($item->properti->status_seller == 'VIP')
+                            @elseif ($item->properti->status_seller == '1VIP')
                                 <div
                                     class="absolute top-0 right-0 bg-purple-500 text-white p-2 rounded-bl-lg flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -169,10 +169,8 @@
                             @endif
 
                             <a href="{{ route('properti.spesifikasi', $item->id_properti) }}">
-                                {{-- @if ($item->fotos->isNotEmpty())
-                                    <img src="{{ asset('storage/foto_properti/' . $item->fotos->first()->path) }}"
-                                        alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
-                                @endif --}}
+                                <img src="{{ asset('storage/foto_properti/' . $item->pathProp) }}"
+                                alt="{{ $item->judul_produk }}" class="w-full h-64 object-cover">
                                 <div class="p-6">
                                     <h2 class="font-black text-xl">Rp.
                                         {{ number_format($item->properti->harga, 0, ',', '.') }}</h2>

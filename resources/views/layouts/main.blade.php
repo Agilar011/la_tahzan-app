@@ -42,7 +42,9 @@
             <!-- Logo Section -->
             <div class="flex justify-between">
                 <div>
-                    <img src="/img/la tahzan.png" alt="Logo" class="h-[5vw] object-contain" >
+                    <a href="/">
+                        <img src="/img/la tahzan.png" alt="Logo" class="h-[5vw] object-contain" >
+                    </a>
                 </div>
 
                 <!-- Hamburger Menu (Mobile) -->

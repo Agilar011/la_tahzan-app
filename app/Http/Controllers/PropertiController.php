@@ -112,6 +112,8 @@ class PropertiController extends Controller
         $spesifikasi->seller = Auth::user()->name;
         $spesifikasi->phone = Auth::user()->phone;
         $spesifikasi->address = Auth::user()->address;
+        $spesifikasi->address = Auth::user()->address;
+        $spesifikasi->status_seller = Auth::user()->status_seller;
         $spesifikasi->jenis_properti = $request->jenis_properti;
         $spesifikasi->luas_tanah = $request->luas_tanah;
         $spesifikasi->luas_bangunan = $request->luas_bangunan;
@@ -132,12 +134,14 @@ class PropertiController extends Controller
         $warehouse->provinsi = $spesifikasi->provinsi;
         $warehouse->luas_tanah = $spesifikasi->luas_tanah;
         $warehouse->luas_bangunan = $spesifikasi->luas_bangunan;
+        $warehouse->status_seller = Auth::user()->status_seller;
         $warehouse->kamar_tidur = $spesifikasi->jumlah_kamar_tidur;
         $warehouse->kamar_mandi = $spesifikasi->jumlah_kamar_mandi;
+        $warehouse->pathOto = '';
         $warehouse->save();
 
         if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $file) {
+            foreach ($request->file('foto') as $index => $file) {
                 $filename = $file->hashName(); // Menghasilkan nama file acak unik
                 $file->storeAs('public/foto_properti', $filename); // Menyimpan file dengan nama yang dihasilkan
 
@@ -145,8 +149,15 @@ class PropertiController extends Controller
                 $foto->properti_id = $properti->id;
                 $foto->path = $filename; // Menyimpan nama file saja di database
                 $foto->save();
+
+                // Set pathOto for the first photo
+                if ($index == 0) {
+                    $warehouse->pathProp = $filename;
+                }
             }
         }
+
+        $warehouse->save();
 
         return redirect()->route('admin.properti.index')->with('success', 'Properti created successfully.');
     }
@@ -258,32 +269,42 @@ class PropertiController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function changeStatus(Request $request, $id)
-    {
-        $properti = Properti::find($id);
-        if (!$properti) {
-            return response()->json(['success' => false, 'message' => 'Properti not found.'], 404);
-        }
-
-        $properti->status_payment = $request->input('status_payment');
-        $properti->status_ads = $request->input('status_ads');
-        $properti->save();
-
-        return response()->json(['success' => true]);
-    }
-
     public function spesifikasi($id)
     {
-        $properti = Properti::join('spesifikasi_properti', 'properti.id', '=', 'spesifikasi_properti.properti_id')
+
+    $properti = Properti::with('fotos') // Pastikan fotos di-load
+        ->join('spesifikasi_properti', 'properti.id', '=', 'spesifikasi_properti.properti_id')
         ->join('users', 'spesifikasi_properti.user_id', '=', 'users.id')
-        ->with('spesifikasi', 'fotos')->findOrFail($id);
+        ->findOrFail($id);
 
-        $properti->jumlahProduk = SpesifikasiProperti::where('user_id', $properti->user_id)->count();
-        $properti->sellerBergabung = SpesifikasiProperti::where('user_id', $properti->user_id)
-                ->min('created_at');
-                $properti->sellerBergabung = (new DateTime($properti->sellerBergabung))->format('d F Y');
+    // Hitung jumlah produk dan tanggal bergabung seller
+    $properti->jumlahProduk = SpesifikasiProperti::where('user_id', $properti->user_id)->count();
+    $properti->sellerBergabung = SpesifikasiProperti::where('user_id', $properti->user_id)
+        ->min('created_at');
+    $properti->sellerBergabung = (new DateTime($properti->sellerBergabung))->format('d F Y');
 
-        return view('customer.spesifikasi-properti', compact('properti'));
+
+
+    $photo = Properti::with('fotos') // Pastikan fotos di-load
+        ->join('spesifikasi_properti', 'properti.id', '=', 'spesifikasi_properti.properti_id')
+        ->findOrFail($id);
+
+    // Hitung jumlah produk dan tanggal bergabung seller
+    $photo->jumlahProduk = SpesifikasiProperti::where('user_id', $properti->user_id)->count();
+    $photo->sellerBergabung = SpesifikasiProperti::where('user_id', $properti->user_id)
+        ->min('created_at');
+    $photo->sellerBergabung = (new DateTime($properti->created_at))->format('d F Y');
+
+    return view('customer.spesifikasi-properti', compact('properti', 'photo'));
+    }
+
+
+    public function show($id)
+    {
+    $properti = Properti::with('fotos')->findOrFail($id);
+    // Debugging
+    dd($properti->fotos);
+    return view('customer.spesifikasi-properti', compact('properti'));
     }
 }
 
